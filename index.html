@@ -137,7 +137,7 @@
     .scan-bar-fill{height:100%;width:0%;background:var(--accent-cyan);border-radius:2px;transition:width .3s ease}
     .stats-panel{display:flex;flex-direction:column;gap:2px}
     .stat-row{
-      display:grid;grid-template-columns:16px 1fr auto;
+      display:grid;grid-template-columns:16px 1fr auto auto;
       align-items:center;gap:12px;padding:14px 16px;
       background:var(--bg-card);border:1px solid var(--bg-card-border);
       border-radius:4px;transition:border-color .3s ease,background .3s ease;
@@ -150,6 +150,17 @@
     }
     .stat-row:hover{border-color:rgba(0,240,255,.2);background:rgba(10,22,40,.9)}
     .stat-row:hover::before{opacity:1}
+    .stat-rank{
+      font-family:var(--font-display);font-size:1.1rem;font-weight:900;
+      width:28px;text-align:center;transition:all .3s ease;
+      user-select:none;
+    }
+    .rank-val-s{color:#00f0ff;text-shadow:0 0 10px #00f0ff}
+    .rank-val-a{color:#a78bfa;text-shadow:0 0 10px #a78bfa}
+    .rank-val-b{color:#34d399;text-shadow:0 0 10px #34d399}
+    .rank-val-c{color:#facc15;text-shadow:0 0 10px #facc15}
+    .rank-val-d{color:#fb923c;text-shadow:0 0 10px #fb923c}
+    .rank-val-e{color:#f87171;text-shadow:0 0 10px #f87171}
     .stat-plus{font-size:1rem;font-weight:700;color:var(--text-dim);text-align:center;user-select:none}
     .stat-info{display:flex;flex-direction:column;gap:6px;min-width:0}
     .stat-name{font-size:.78rem;font-weight:700;color:var(--text-primary);letter-spacing:.15em}
@@ -581,6 +592,7 @@
             <div class="stat-bar-fill" id="bar-${stat.key}"></div>
           </div>
         </div>
+        <span class="stat-rank rank-val-e" id="rank-val-${stat.key}">E</span>
         <div class="stat-value-wrap">
           <input type="number" class="stat-input" id="input-${stat.key}"
                  placeholder="0" step="any" min="0" value="">
@@ -620,26 +632,44 @@
         if (pct >= 50) return '#facc15';
         return '#f87171';
       }
+      function getStatRank(pct) {
+        if (pct >= 90) return { rank: 'S', cls: 'rank-val-s', score: 5 };
+        if (pct >= 75) return { rank: 'A', cls: 'rank-val-a', score: 4 };
+        if (pct >= 60) return { rank: 'B', cls: 'rank-val-b', score: 3 };
+        if (pct >= 45) return { rank: 'C', cls: 'rank-val-c', score: 2 };
+        if (pct >= 25) return { rank: 'D', cls: 'rank-val-d', score: 1 };
+        return { rank: 'E', cls: 'rank-val-e', score: 0 };
+      }
       function updateBar(key) {
         const stat = STATS.find(s => s.key === key);
         const pct = Math.min((values[key] / stat.goal) * 100, 100);
         const bar = $(`bar-${key}`);
         bar.style.width = pct + '%';
         bar.style.background = getColor(pct);
+        const info = getStatRank(pct);
+        const rankEl = $(`rank-val-${key}`);
+        rankEl.textContent = info.rank;
+        rankEl.className = `stat-rank ${info.cls}`;
       }
       function updateRank() {
-        let total = 0;
-        STATS.forEach(s => total += Math.min((values[s.key] / s.goal) * 100, 100));
-        const avg = total / STATS.length;
+        let totalScore = 0;
+        let totalPct = 0;
+        STATS.forEach(s => {
+          const pct = Math.min((values[s.key] / s.goal) * 100, 100);
+          totalScore += getStatRank(pct).score;
+          totalPct += pct;
+        });
+        const avgScore = totalScore / STATS.length;
+        const avgPct = totalPct / STATS.length;
         let rank, cls;
-        if (avg >= 90) { rank = 'S'; cls = 'rank-s'; }
-        else if (avg >= 75) { rank = 'A'; cls = 'rank-a'; }
-        else if (avg >= 60) { rank = 'B'; cls = 'rank-b'; }
-        else if (avg >= 45) { rank = 'C'; cls = 'rank-c'; }
-        else if (avg >= 25) { rank = 'D'; cls = 'rank-d'; }
+        if (avgScore >= 4.5) { rank = 'S'; cls = 'rank-s'; }
+        else if (avgScore >= 3.5) { rank = 'A'; cls = 'rank-a'; }
+        else if (avgScore >= 2.5) { rank = 'B'; cls = 'rank-b'; }
+        else if (avgScore >= 1.5) { rank = 'C'; cls = 'rank-c'; }
+        else if (avgScore >= 0.5) { rank = 'D'; cls = 'rank-d'; }
         else { rank = 'E'; cls = 'rank-e'; }
         rankLetter.textContent = rank;
-        rankPercent.textContent = avg.toFixed(1) + '%';
+        rankPercent.textContent = avgPct.toFixed(1) + '%';
         rankSection.className = 'rank-section ' + cls;
       }
       function showToast(msg) {
