@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditor de Cuentas — Solo Leveling: Arise</title>
+  <meta name="description"
+    content="Herramienta de auditoría automática de estadísticas para Solo Leveling: Arise con OCR integrado.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --bg-deep: #030811;
+      --bg-card: #0a1628;
+      --bg-card-border: #0f2240;
+      --accent-cyan: #00f0ff;
+      --accent-red: #f87171;
+      --accent-yellow: #facc15;
+      --text-primary: #e0ecff;
+      --text-secondary: #5a7a9e;
+      --text-dim: #2a4060;
+      --font-main: 'Rajdhani', sans-serif;
+      --font-display: 'Orbitron', sans-serif;
+    }
+
+    html {
+      font-size: 16px
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .4;
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px
+    }
+
+    .header__subtitle {
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      letter-spacing: .35em;
+      margin-bottom: 4px;
+      opacity: .8;
+    }
+
+    .header__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: .15em;
+    }
+
+    .header__line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+      margin: 12px auto 0;
+    }
+
+    .rank-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .rank-hex {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rank-hex__border {
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--accent-cyan);
+      opacity: .3;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      animation: hex-rotate 12s linear infinite;
+    }
+
+    .rank-hex__border--inner {
+      inset: 8px;
+      opacity: .15;
+      animation-direction: reverse;
+      animation-duration: 18s;
+    }
+
+    @keyframes hex-rotate {
+      from {
+        transform: rotate(0deg)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .rank-letter {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--accent-cyan);
+      text-shadow: 0 0 20px var(--accent-cyan), 0 0 40px var(--accent-cyan), 0 0 80px rgba(0, 240, 255, .4);
+      transition: all .6s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1;
+    }
+
+    .rank-label {
+      font-size: .65rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .4em;
+      margin-top: 8px;
+    }
+
+    .rank-percent {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-top: 2px;
+      transition: color .4s ease;
+    }
+
+    .dropzone {
+      position: relative;
+      border: 1px dashed var(--bg-card-border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s ease;
+      margin-bottom: 28px;
+      background: rgba(10, 22, 40, .4);
+      overflow: hidden;
+    }
+
+    .dropzone::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 240, 255, .03), transparent);
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.drag-over {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, .04);
+    }
+
+    .dropzone:hover::before,
+    .dropzone.drag-over::before {
+      opacity: 1
+    }
+
+    .dropzone__icon {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+      opacity: .5;
+      transition: opacity .3s ease
+    }
+
+    .dropzone:hover .dropzone__icon {
+      opacity: .9
+    }
+
+    .dropzone__text {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .2em
+    }
+
+    .dropzone__subtext {
+      font-size: .65rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      letter-spacing: .1em
+    }
+
+    .dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer
+    }
+
+    .dropzone.scanning {
+      border-color: var(--accent-cyan);
+      pointer-events: none
+    }
+
+    .dropzone.scanning .dropzone__icon,
+    .dropzone.scanning .dropzone__text,
+    .dropzone.scanning .dropzone__subtext {
+      display: none
+    }
+
+    .dropzone.hidden {
+      display: none
+    }
+
+    .scan-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(3, 8, 17, .65);
+      z-index: 2;
+    }
+
+    .scan-overlay.active {
+      display: flex
+    }
+
+    .scan-spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--bg-card-border);
+      border-top-color: var(--accent-cyan);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .scan-label {
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      letter-spacing: .25em
+    }
+
+    .scan-bar-track {
+      width: 200px;
+      height: 3px;
+      background: var(--bg-card-border);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .scan-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      transition: width .3s ease
+    }
+
+    .stats-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 2px
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 16px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 4px;
+      transition: border-color .3s ease, background .3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent-cyan);
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .stat-row:hover {
+      border-color: rgba(0, 240, 255, .2);
+      background: rgba(10, 22, 40, .9)
+    }
+
+    .stat-row:hover::before {
+      opacity: 1
+    }
+
+    .stat-plus {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-align: center;
+      user-select: none
+    }
+
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0
+    }
+
+    .stat-name {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: .15em
+    }
+
+    .stat-bar-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, .05);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width .8s cubic-bezier(.16, 1, .3, 1), background .4s ease;
+      background: var(--accent-cyan);
+      position: relative;
+    }
+
+    .stat-bar-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -1px;
+      width: 6px;
+      height: 5px;
+      background: inherit;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: .8;
+    }
+
+    .stat-value-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2px
+    }
+
+    .stat-input {
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 2px 6px;
+      width: 90px;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      outline: none;
+      transition: border-color .2s ease, background .2s ease;
+    }
+
+    .stat-input:hover {
+      border-color: var(--bg-card-border)
+    }
+
+    .stat-input:focus {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, .05)
+    }
+
+    .stat-input::placeholder {
+      color: var(--text-dim)
+    }
+
+    .stat-input::-webkit-outer-spin-button,
+    .stat-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0
+    }
+
+    .stat-input[type="number"] {
+      -moz-appearance: textfield
+    }
+
+    .rank-s .rank-letter {
+      color: #00f0ff;
+      text-shadow: 0 0 20px #00f0ff, 0 0 40px #00f0ff, 0 0 80px rgba(0, 240, 255, .4)
+    }
+
+    .rank-a .rank-letter {
+      color: #a78bfa;
+      text-shadow: 0 0 20px #a78bfa, 0 0 40px #a78bfa, 0 0 80px rgba(167, 139, 250, .4)
+    }
+
+    .rank-b .rank-letter {
+      color: #34d399;
+      text-shadow: 0 0 20px #34d399, 0 0 40px #34d399, 0 0 80px rgba(52, 211, 153, .4)
+    }
+
+    .rank-c .rank-letter {
+      color: #facc15;
+      text-shadow: 0 0 20px #facc15, 0 0 40px #facc15, 0 0 80px rgba(250, 204, 21, .4)
+    }
+
+    .rank-d .rank-letter {
+      color: #fb923c;
+      text-shadow: 0 0 20px #fb923c, 0 0 40px #fb923c, 0 0 80px rgba(251, 146, 60, .4)
+    }
+
+    .rank-e .rank-letter {
+      color: #f87171;
+      text-shadow: 0 0 20px #f87171, 0 0 40px #f87171, 0 0 80px rgba(248, 113, 113, .4)
+    }
+
+    .rank-s .rank-percent {
+      color: #00f0ff
+    }
+
+    .rank-a .rank-percent {
+      color: #a78bfa
+    }
+
+    .rank-b .rank-percent {
+      color: #34d399
+    }
+
+    .rank-c .rank-percent {
+      color: #facc15
+    }
+
+    .rank-d .rank-percent {
+      color: #fb923c
+    }
+
+    .rank-e .rank-percent {
+      color: #f87171
+    }
+
+    .rank-s .rank-hex__border {
+      border-color: #00f0ff
+    }
+
+    .rank-a .rank-hex__border {
+      border-color: #a78bfa
+    }
+
+    .rank-b .rank-hex__border {
+      border-color: #34d399
+    }
+
+    .rank-c .rank-hex__border {
+      border-color: #facc15
+    }
+
+    .rank-d .rank-hex__border {
+      border-color: #fb923c
+    }
+
+    .rank-e .rank-hex__border {
+      border-color: #f87171
+    }
+
+    .ocr-preview {
+      margin-bottom: 20px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--bg-card-border);
+      display: none;
+      position: relative;
+    }
+
+    .ocr-preview.active {
+      display: block
+    }
+
+    .ocr-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 1
+    }
+
+    .ocr-preview__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--bg-card-border);
+    }
+
+    .ocr-preview__label {
+      font-size: .6rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: .2em
+    }
+
+    .ocr-preview__close {
+      font-size: .6rem;
+      font-weight: 600;
+      color: var(--accent-red);
+      letter-spacing: .15em;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-transform: uppercase;
+      font-family: var(--font-main);
+      padding: 4px 8px;
+      border-radius: 3px;
+      transition: background .2s ease;
+    }
+
+    .ocr-preview__close:hover {
+      background: rgba(248, 113, 113, .1)
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--bg-card-border)
+    }
+
+    .footer__text {
+      font-size: .6rem;
+      color: var(--text-dim);
+      letter-spacing: .2em
+    }
+
+    .crit-note {
+      grid-column: 2/4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      padding: 4px 0 0;
+      transition: color .3s ease;
+    }
+
+    .crit-note .crit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: .55rem;
+      letter-spacing: .1em;
+      font-weight: 700;
+    }
+
+    .crit-note.safe {
+      color: var(--accent-cyan)
+    }
+
+    .crit-note.safe .crit-badge {
+      background: rgba(0, 240, 255, .1);
+      color: #00f0ff
+    }
+
+    .crit-note.warn {
+      color: var(--accent-yellow)
+    }
+
+    .crit-note.warn .crit-badge {
+      background: rgba(250, 204, 21, .1);
+      color: #facc15
+    }
+
+    .crit-note.danger {
+      color: var(--accent-red)
+    }
+
+    .crit-note.danger .crit-badge {
+      background: rgba(248, 113, 113, .1);
+      color: #f87171
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .stat-row {
+      animation: fade-in-up .5s cubic-bezier(.16, 1, .3, 1) both
+    }
+
+    .stat-row:nth-child(1) {
+      animation-delay: .05s
+    }
+
+    .stat-row:nth-child(2) {
+      animation-delay: .1s
+    }
+
+    .stat-row:nth-child(3) {
+      animation-delay: .15s
+    }
+
+    .stat-row:nth-child(4) {
+      animation-delay: .2s
+    }
+
+    .stat-row:nth-child(5) {
+      animation-delay: .25s
+    }
+
+    .stat-row:nth-child(6) {
+      animation-delay: .3s
+    }
+
+    @media(max-width:480px) {
+      .app-container {
+        padding: 16px 10px 32px
+      }
+
+      .stat-input {
+        width: 72px;
+        font-size: .9rem
+      }
+
+      .rank-letter {
+        font-size: 2.8rem
+      }
+
+      .rank-hex {
+        width: 100px;
+        height: 100px
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-card);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      font-family: var(--font-main);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: 6px;
+      z-index: 100;
+      opacity: 0;
+      transition: all .4s cubic-bezier(.16, 1, .3, 1);
+      pointer-events: none;
+      box-shadow: 0 0 30px rgba(0, 240, 255, .15);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    .scanline-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, .008) 2px, rgba(0, 240, 255, .008) 4px);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <div class="scanline-overlay"></div>
+  <div class="app-container">
+    <header class="header">
+      <p class="header__subtitle">Solo Leveling: Arise</p>
+      <h1 class="header__title">S Rank Calculator</h1>
+      <div class="header__line"></div>
+    </header>
+    <section class="rank-section rank-e" id="rank-section">
+      <div class="rank-hex">
+        <div class="rank-hex__border"></div>
+        <div class="rank-hex__border rank-hex__border--inner"></div>
+        <span class="rank-letter" id="rank-letter">E</span>
+      </div>
+      <span class="rank-label">Rango General</span>
+      <span class="rank-percent" id="rank-percent">0.0%</span>
+    </section>
+    <div class="dropzone" id="dropzone">
+      <div class="dropzone__icon">⬆</div>
+      <p class="dropzone__text">Arrastra tu captura aquí</p>
+      <p class="dropzone__subtext">o haz clic para seleccionar</p>
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+    <div class="ocr-preview" id="ocr-preview">
+      <img id="ocr-preview-img" src="" alt="Captura escaneada">
+      <div class="scan-overlay" id="scan-overlay">
+        <div class="scan-spinner"></div>
+        <span class="scan-label" id="scan-label">Escaneando...</span>
+        <div class="scan-bar-track">
+          <div class="scan-bar-fill" id="scan-bar-fill"></div>
+        </div>
+      </div>
+      <div class="ocr-preview__bar">
+        <span class="ocr-preview__label">Imagen escaneada</span>
+        <button class="ocr-preview__close" id="ocr-close-btn">✕ Cerrar</button>
+      </div>
+    </div>
+    <div class="stats-panel" id="stats-panel"></div>
+    <footer class="footer">
+      <p class="footer__text">Sistema de Análisis v1.0 — No oficial</p>
+    </footer>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const CRIT_RAW_SAFE = 12000;
+
+      const STATS = [
+        {
+          key: 'atq', label: 'ATQ', unit: '', goal: 90000,
+          matchers: ['ataque', 'atq', 'atk', 'attack'], isLargeNum: true
+        },
+        {
+          key: 'pre', label: 'PRE (%)', unit: '%', goal: 92,
+          matchers: ['precision', 'precisio', 'prec', 'accuracy'], isLargeNum: false
+        },
+        {
+          key: 'critdmg', label: 'DAÑO CRIT (%)', unit: '%', goal: 220,
+          matchers: ['dano de golpe', 'da.o de golpe', 'crit.*dam', 'crit dmg',
+            'critical damage', 'crit damage', 'critdmg'], isLargeNum: false
+        },
+        {
+          key: 'crit', label: 'CRIT (%)', unit: '%', goal: 50,
+          matchers: ['indice de golpe', 'indice.*golpe', 'ind.*golpe.*cri',
+            'crit rate', 'crit chance', 'probabilidad.*cri'], isLargeNum: false
+        },
+        {
+          key: 'pen', label: 'PEN (%)', unit: '%', goal: 45,
+          matchers: ['penetracion', 'penetrac', 'penetration',
+            'pen.*def', 'def.*pen', 'ignorar def'], isLargeNum: false
+        },
+        {
+          key: 'aumdmg', label: 'AUM. DAÑO (%)', unit: '%', goal: 40,
+          matchers: ['aumento de da', 'aumento de dano', 'aum.*dano',
+            'dmg increase', 'damage increase', 'aumento'], isLargeNum: false
+        }
+      ];
+
+      const values = {};
+      STATS.forEach(s => values[s.key] = 0);
+      let critRawValue = 0;
+
+      const $ = id => document.getElementById(id);
+      const dropzone = $('dropzone'), fileInput = $('file-input');
+      const scanBarFill = $('scan-bar-fill'), scanLabel = $('scan-label');
+      const statsPanel = $('stats-panel'), rankSection = $('rank-section');
+      const rankLetter = $('rank-letter'), rankPercent = $('rank-percent');
+      const ocrPreview = $('ocr-preview'), ocrPreviewImg = $('ocr-preview-img');
+      const ocrCloseBtn = $('ocr-close-btn'), toast = $('toast');
+
+      function buildRows() {
+        statsPanel.innerHTML = '';
+        STATS.forEach(stat => {
+          const row = document.createElement('div');
+          row.className = 'stat-row';
+          row.id = `row-${stat.key}`;
+          let extra = '';
+          if (stat.key === 'crit') {
+            extra = `<div class="crit-note" id="crit-note" style="display:none">
+          <span class="crit-badge" id="crit-badge"></span>
+          <span id="crit-raw-label"></span>
+        </div>`;
+          }
+          row.innerHTML = `
+        <span class="stat-plus">+</span>
+        <div class="stat-info">
+          <span class="stat-name">${stat.label}</span>
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill" id="bar-${stat.key}"></div>
+          </div>
+        </div>
+        <div class="stat-value-wrap">
+          <input type="number" class="stat-input" id="input-${stat.key}"
+                 placeholder="0" step="any" min="0" value="">
+        </div>${extra}`;
+          statsPanel.appendChild(row);
+          row.querySelector(`#input-${stat.key}`).addEventListener('input', function () {
+            values[stat.key] = parseFloat(this.value) || 0;
+            updateBar(stat.key);
+            updateRank();
+          });
+        });
+      }
+
+      function updateCritNote(raw) {
+        critRawValue = raw;
+        const note = $('crit-note');
+        const badge = $('crit-badge');
+        const label = $('crit-raw-label');
+        if (!note || raw <= 0) { if (note) note.style.display = 'none'; return; }
+        note.style.display = 'flex';
+        const formatted = raw.toLocaleString('es');
+        if (raw >= CRIT_RAW_SAFE) {
+          note.className = 'crit-note safe';
+          badge.textContent = '✓ RESISTENTE';
+          label.textContent = `RAW ${formatted} — Protegido vs debuffs`;
+        } else if (raw >= CRIT_RAW_SAFE * 0.7) {
+          note.className = 'crit-note warn';
+          badge.textContent = '⚠ PARCIAL';
+          label.textContent = `RAW ${formatted} — Vulnerable a debuffs altos (-30%)`;
+        } else {
+          note.className = 'crit-note danger';
+          badge.textContent = '✕ VULNERABLE';
+          label.textContent = `RAW ${formatted} — Bosses reducirán tu crítico`;
+        }
+      }
+
+      function getColor(pct) {
+        if (pct >= 85) return '#00f0ff';
+        if (pct >= 50) return '#facc15';
+        return '#f87171';
+      }
+
+      function updateBar(key) {
+        const stat = STATS.find(s => s.key === key);
+        const pct = Math.min((values[key] / stat.goal) * 100, 100);
+        const bar = $(`bar-${key}`);
+        bar.style.width = pct + '%';
+        bar.style.background = getColor(pct);
+      }
+
+      function updateRank() {
+        let total = 0;
+        STATS.forEach(s => total += Math.min((values[s.key] / s.goal) * 100, 100));
+        const avg = total / STATS.length;
+        let rank, cls;
+        if (avg >= 90) { rank = 'S'; cls = 'rank-s'; }
+        else if (avg >= 75) { rank = 'A'; cls = 'rank-a'; }
+        else if (avg >= 60) { rank = 'B'; cls = 'rank-b'; }
+        else if (avg >= 45) { rank = 'C'; cls = 'rank-c'; }
+        else if (avg >= 25) { rank = 'D'; cls = 'rank-d'; }
+        else { rank = 'E'; cls = 'rank-e'; }
+        rankLetter.textContent = rank;
+        rankPercent.textContent = avg.toFixed(1) + '%';
+        rankSection.className = 'rank-section ' + cls;
+      }
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      }
+
+      ['dragenter', 'dragover'].forEach(e => dropzone.addEventListener(e, ev => { ev.preventDefault(); dropzone.classList.add('drag-over'); }));
+      ['dragleave', 'drop'].forEach(e => dropzone.addEventListener(e, ev => { ev.preventDefault(); dropzone.classList.remove('drag-over'); }));
+      dropzone.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) processImage(f); });
+      fileInput.addEventListener('change', e => { const f = e.target.files[0]; if (f) processImage(f); fileInput.value = ''; });
+      ocrCloseBtn.addEventListener('click', () => {
+        ocrPreview.classList.remove('active');
+        dropzone.classList.remove('hidden');
+      });
+
+      async function processImage(file) {
+        ocrPreviewImg.src = URL.createObjectURL(file);
+        ocrPreview.classList.add('active');
+        dropzone.classList.add('hidden');
+        const scanOverlay = $('scan-overlay');
+        scanOverlay.classList.add('active');
+        scanBarFill.style.width = '0%';
+        scanLabel.textContent = 'Inicializando OCR...';
+        try {
+          const result = await Tesseract.recognize(file, 'eng+spa', {
+            logger: m => {
+              if (m.status === 'recognizing text') {
+                const pct = Math.round(m.progress * 100);
+                scanBarFill.style.width = pct + '%';
+                scanLabel.textContent = `Escaneando... ${pct}%`;
+              }
+            }
+          });
+          parseOCRText(result.data.text);
+          showToast('Escaneo completado');
+        } catch (err) {
+          showToast('Error en el escaneo');
+        } finally {
+          scanOverlay.classList.remove('active');
+          scanBarFill.style.width = '0%';
+        }
+      }
+
+      function normalize(str) {
+        return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ñ/g, 'n');
+      }
+
+      function getTextAfterKeyword(line, matchers) {
+        for (const matcher of matchers) {
+          const norm = normalize(matcher);
+          try {
+            const m = line.match(new RegExp(norm, 'i'));
+            if (m) return line.substring(m.index + m[0].length);
+          } catch {
+            const idx = line.indexOf(norm);
+            if (idx !== -1) return line.substring(idx + norm.length);
+          }
+        }
+        return null;
+      }
+
+      function extractValueFromTail(tail, isLarge) {
+        let cleaned = tail.replace(/\([^)]*\)/g, ' ').replace(/[?!¿¡:;|]/g, ' ');
+        if (isLarge) {
+          const numText = cleaned.replace(/%/g, ' ').replace(/\s+/g, ' ').trim();
+          const matches = numText.match(/\d[\d,.]*\d|\d+/g);
+          if (matches) {
+            for (const m of matches) {
+              let num = m.replace(/\s/g, '').replace(/,/g, '');
+              const dp = num.split('.');
+              if (dp.length === 2 && dp[1].length === 3) num = num.replace(/\./g, '');
+              const val = parseFloat(num);
+              if (!isNaN(val) && val >= 1000) return val;
+            }
+          }
+          return null;
+        }
+        const pctMatches = [];
+        const pctRegex = /([\d\s.,]+)\s*%/g;
+        let pctMatch;
+        while ((pctMatch = pctRegex.exec(cleaned)) !== null) {
+          let numStr = pctMatch[1].trim().replace(/\s/g, '').replace(/,/g, '.');
+          const dots = numStr.split('.');
+          if (dots.length > 2) numStr = dots.slice(0, -1).join('') + '.' + dots[dots.length - 1];
+          const val = parseFloat(numStr);
+          if (!isNaN(val) && val > 0 && val < 1000) pctMatches.push(val);
+        }
+        if (pctMatches.length > 0) return Math.max(...pctMatches);
+        const plainText = cleaned.replace(/%/g, ' ').replace(/\s+/g, ' ').trim();
+        const matches = plainText.match(/\d+[.,]\d+|\d+/g);
+        if (matches) {
+          let best = null;
+          for (const m of matches) {
+            const val = parseFloat(m.replace(/,/g, '.'));
+            if (!isNaN(val) && val > 0 && val < 1000 && (best === null || val > best)) best = val;
+          }
+          if (best !== null) return best;
+        }
+        return null;
+      }
+
+      function extractRawFromParens(tail) {
+        const m = tail.match(/\((\d[\d,.]*\d?)\)/);
+        if (m) {
+          const val = parseFloat(m[1].replace(/,/g, '').replace(/\s/g, ''));
+          if (!isNaN(val) && val > 0) return val;
+        }
+        return 0;
+      }
+
+      function parseOCRText(rawText) {
+        const text = normalize(rawText);
+        const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+        const assigned = new Set(), usedLines = new Set();
+        for (const stat of STATS) {
+          if (assigned.has(stat.key)) continue;
+          for (let li = 0; li < lines.length; li++) {
+            if (usedLines.has(li)) continue;
+            const tail = getTextAfterKeyword(lines[li], stat.matchers);
+            if (tail === null) continue;
+            const val = extractValueFromTail(tail, stat.isLargeNum);
+            if (val !== null) {
+              values[stat.key] = val;
+              $(`input-${stat.key}`).value = val;
+              updateBar(stat.key);
+              assigned.add(stat.key);
+              usedLines.add(li);
+              if (stat.key === 'crit') {
+                const raw = extractRawFromParens(tail);
+                updateCritNote(raw);
+              }
+              break;
+            }
+          }
+        }
+        if (!assigned.has('atq')) {
+          const allText = lines.join(' ');
+          const bigNums = allText.match(/\d[\d,.]*\d|\d+/g);
+          if (bigNums) {
+            let best = 0;
+            for (const n of bigNums) {
+              const v = parseFloat(n.replace(/,/g, '').replace(/\.(\d{3})$/, '$1'));
+              if (v >= 10000 && v <= 500000 && v > best) best = v;
+            }
+            if (best > 0) {
+              values.atq = best;
+              $('input-atq').value = best;
+              updateBar('atq');
+            }
+          }
+        }
+        updateRank();
+      }
+
+      function initParticles() {
+        const canvas = $('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const COUNT = 40;
+        function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+        function create() {
+          return {
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - .5) * .3, vy: -Math.random() * .4 - .1,
+            size: Math.random() * 1.5 + .5, alpha: Math.random() * .5 + .1,
+            life: Math.random()
+          };
+        }
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy; p.life += .002;
+            if (p.y < -10 || p.life > 1) { particles[i] = create(); particles[i].y = canvas.height + 10; }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(0,240,255,${p.alpha * (1 - p.life)})`;
+            ctx.fill();
+          });
+          requestAnimationFrame(draw);
+        }
+        addEventListener('resize', resize);
+        resize();
+        particles = Array.from({ length: COUNT }, create);
+        draw();
+      }
+
+      buildRows();
+      updateRank();
+      initParticles();
+    })();
+  </script>
+</body>
+
+</html>
