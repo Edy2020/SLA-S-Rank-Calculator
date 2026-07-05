@@ -163,7 +163,9 @@
     .rank-val-e{color:#f87171;text-shadow:0 0 10px #f87171}
     .stat-plus{font-size:1rem;font-weight:700;color:var(--text-dim);text-align:center;user-select:none}
     .stat-info{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .stat-label-row{display:flex;justify-content:space-between;align-items:baseline;width:100%}
     .stat-name{font-size:.78rem;font-weight:700;color:var(--text-primary);letter-spacing:.15em}
+    .stat-goal-label{font-size:0.65rem;color:var(--text-secondary);font-weight:600;letter-spacing:0.02em}
     .stat-bar-track{width:100%;height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
     .stat-bar-fill{
       height:100%;width:0%;border-radius:2px;
@@ -389,68 +391,6 @@
       font-size: 0.82rem;
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
     }
-    .substats-panel {
-      background: rgba(0, 240, 255, 0.02);
-      border: 1px solid rgba(0, 240, 255, 0.1);
-      border-radius: 4px;
-      padding: 14px 16px;
-    }
-    .substats-title {
-      font-family: var(--font-display);
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--accent-yellow);
-      letter-spacing: 0.15em;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .substats-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 480px) {
-      .substats-container {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-    }
-    .substats-side {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .substats-side__header {
-      font-family: var(--font-display);
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      letter-spacing: 0.1em;
-      margin-bottom: 4px;
-    }
-    .substats-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      list-style: none;
-    }
-    .substats-item {
-      font-size: 0.65rem;
-      font-weight: 700;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--bg-card-border);
-      padding: 4px 8px;
-      border-radius: 3px;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .substats-item span {
-      color: var(--accent-cyan);
-    }
   </style>
 </head>
 <body>
@@ -602,27 +542,6 @@
           </ul>
         </div>
       </div>
-      <div class="substats-panel">
-        <div class="substats-title">✦ Substats Perfectas (Prioridad)</div>
-        <div class="substats-container">
-          <div class="substats-side">
-            <div class="substats-side__header">Set Izquierdo (Reliquias)</div>
-            <ul class="substats-list">
-              <li class="substats-item"><span>1.</span> ATQ (%) / ATQ Adicional</li>
-              <li class="substats-item"><span>2.</span> Índice de Golpe Crítico (%)</li>
-              <li class="substats-item"><span>3.</span> Pen. Def (%) / Aum. Daño (%)</li>
-            </ul>
-          </div>
-          <div class="substats-side">
-            <div class="substats-side__header">Set Derecho (Accesorios)</div>
-            <ul class="substats-list">
-              <li class="substats-item"><span>1.</span> ATQ (%) / ATQ Adicional</li>
-              <li class="substats-item"><span>2.</span> Daño Crítico (%)</li>
-              <li class="substats-item"><span>3.</span> Pen. Def (%) / Aum. Daño (%)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </section>
     <footer class="footer">
       <p class="footer__text">Sistema de Análisis v1.0 — No oficial</p>
@@ -639,7 +558,7 @@
           matchers: ['ataque', 'atq', 'atk', 'attack'], isLargeNum: true
         },
         {
-          key: 'pre', label: 'PRE (%)', unit: '%', goal: 92,
+          key: 'pre', label: 'PRE (%)', unit: '%', goal: 95,
           matchers: ['precision', 'precisio', 'prec', 'accuracy'], isLargeNum: false
         },
         {
@@ -689,7 +608,10 @@
           row.innerHTML = `
         <span class="stat-plus">+</span>
         <div class="stat-info">
-          <span class="stat-name">${stat.label}</span>
+          <div class="stat-label-row">
+            <span class="stat-name">${stat.label}</span>
+            <span class="stat-goal-label">Meta: ${stat.key === 'atq' ? '80k' : (stat.key === 'crit' ? '50% (12k RAW vs debuffs)' : stat.goal + stat.unit)}</span>
+          </div>
           <div class="stat-bar-track">
             <div class="stat-bar-fill" id="bar-${stat.key}"></div>
           </div>
