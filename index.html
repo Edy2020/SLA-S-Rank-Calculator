@@ -164,7 +164,45 @@
     .stat-plus{font-size:1rem;font-weight:700;color:var(--text-dim);text-align:center;user-select:none}
     .stat-info{display:flex;flex-direction:column;gap:6px;min-width:0}
     .stat-label-row{display:flex;justify-content:space-between;align-items:baseline;width:100%}
-    .stat-name{font-size:.78rem;font-weight:700;color:var(--text-primary);letter-spacing:.15em}
+    .stat-name{
+      font-size:.78rem;font-weight:700;color:var(--text-primary);letter-spacing:.15em;
+      cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+      transition:color .2s ease;user-select:none;
+    }
+    .stat-name:hover{color:var(--accent-cyan)}
+    .stat-help-icon{
+      color:var(--accent-cyan);opacity:.65;
+      transition:all .25s cubic-bezier(.16,1,.3,1);
+      display:inline-flex;align-items:center;justify-content:center;
+      margin-left:2px;flex-shrink:0;
+    }
+    .stat-name:hover .stat-help-icon{
+      opacity:1;transform:scale(1.2) rotate(8deg);
+      filter:drop-shadow(0 0 6px var(--accent-cyan));
+    }
+    .stat-tooltip{
+      position:fixed;z-index:10000;max-width:320px;width:90vw;
+      background:rgba(10,22,40,.96);border:1px solid var(--accent-cyan);
+      border-radius:6px;padding:14px;
+      box-shadow:0 8px 24px rgba(0,0,0,.7),0 0 16px rgba(0,240,255,.2);
+      backdrop-filter:blur(12px);opacity:0;pointer-events:none;
+      transform:translateY(6px);transition:opacity .2s ease,transform .2s ease;
+    }
+    .stat-tooltip.show{opacity:1;transform:translateY(0)}
+    .stat-tooltip__header{
+      font-family:var(--font-display);font-size:.85rem;font-weight:700;
+      color:var(--accent-cyan);margin-bottom:6px;display:flex;
+      align-items:center;gap:6px;letter-spacing:.05em;
+    }
+    .stat-tooltip__body{
+      font-size:.75rem;color:var(--text-primary);line-height:1.45;
+      margin-bottom:8px;
+    }
+    .stat-tooltip__meta{
+      font-size:.7rem;color:var(--text-secondary);
+      background:rgba(255,255,255,.03);border-left:2px solid var(--accent-cyan);
+      padding:6px 8px;border-radius:0 4px 4px 0;line-height:1.35;
+    }
     .stat-goal-label{font-size:0.65rem;color:var(--text-secondary);font-weight:600;letter-spacing:0.02em}
     .stat-bar-track{width:100%;height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
     .stat-bar-fill{
@@ -613,6 +651,11 @@
       <p class="footer__text">Sistema de Análisis v1.0 — No oficial</p>
     </footer>
   </div>
+  <div class="stat-tooltip" id="stat-tooltip">
+    <div class="stat-tooltip__header" id="tooltip-title"></div>
+    <div class="stat-tooltip__body" id="tooltip-body"></div>
+    <div class="stat-tooltip__meta" id="tooltip-meta"></div>
+  </div>
   <div class="toast" id="toast"></div>
   <script>
     (function () {
@@ -658,6 +701,65 @@
       const rankLetter = $('rank-letter'), rankPercent = $('rank-percent');
       const ocrPreview = $('ocr-preview'), ocrPreviewImg = $('ocr-preview-img');
       const ocrCloseBtn = $('ocr-close-btn'), toast = $('toast');
+      const STAT_DESCRIPTIONS = {
+        'atq': {
+          title: '✦ ATQ (Ataque Base y Total)',
+          body: 'Es la base matemática sobre la cual se calcula el daño de todo tu kit de habilidades (ataques básicos, habilidades normales, definitivas y sombras).',
+          meta: '💡 Meta SLA: La gran mayoría de cazadores DPS y Jinwoo escalan con ATQ. Superar los 80,000 pts garantiza una base sólida para derribar jefes en contenido contrarreloj.'
+        },
+        'pre': {
+          title: '✦ PRE (%) (Precisión)',
+          body: 'Determina tu probabilidad de conectar impactos limpios sin sufrir penalización por fallo o evasión del enemigo.',
+          meta: '💡 Meta SLA: Contra jefes de nivel superior (números rojos), si tu precisión es menor al 95%, tus ataques fallarán ("Miss"), perdiendo hasta 50% de daño y rompiendo tus combos de crítico.'
+        },
+        'critdmg': {
+          title: '✦ DAÑO CRIT (%) (Daño Crítico)',
+          body: 'Multiplica el daño final de tu ataque cada vez que se activa un impacto crítico.',
+          meta: '💡 Meta SLA: Es la estadística clave para el daño explosivo (burst DPS). Se busca un mínimo de 210%. Para lograrlo, es indispensable equipar Botas con stat principal de Daño Crítico (%).'
+        },
+        'crit': {
+          title: '✦ CRIT (%) (Índice de Golpe Crítico)',
+          body: 'Es la probabilidad porcentual de que cualquiera de tus ataques se convierta en un golpe crítico.',
+          meta: '💡 Meta SLA: El juego tiene un límite estricto del 50%. Sin embargo, los jefes endgame aplican resistencias que reducen tu crítico; acumular ~12,000 pts RAW asegura mantener el 50% real ante debuffs.'
+        },
+        'pen': {
+          title: '✦ PEN (%) (Penetración de Defensa)',
+          body: 'Permite que tus ataques ignoren un porcentaje directo de la mitigación y armadura del enemigo.',
+          meta: '💡 Meta SLA: Los bosses en dificultades altas tienen defensas masivas. Una penetración sobre el 40% aumenta exponencialmente tu daño real sostenido al atravesar su armadura.'
+        },
+        'aumdmg': {
+          title: '✦ AUM. DAÑO (%) (Aumento de Daño / Elemental)',
+          body: 'Es un multiplicador independiente que amplifica directamente todo el daño final infligido al enemigo.',
+          meta: '💡 Meta SLA: Una de las estadísticas más valiosas del juego. Se obtiene en Esferas/Pulseras y substats. Al ser un multiplicador final, un 40%+ representa un salto gigantesco en tu DPS.'
+        }
+      };
+      const tooltip = $('stat-tooltip'), tooltipTitle = $('tooltip-title');
+      const tooltipBody = $('tooltip-body'), tooltipMeta = $('tooltip-meta');
+      let activeTooltipKey = null;
+      function showTooltip(key, targetEl) {
+        const info = STAT_DESCRIPTIONS[key];
+        if (!info || !tooltip) return;
+        tooltipTitle.textContent = info.title;
+        tooltipBody.textContent = info.body;
+        tooltipMeta.textContent = info.meta;
+        const rect = targetEl.getBoundingClientRect();
+        tooltip.classList.add('show');
+        activeTooltipKey = key;
+        const tipRect = tooltip.getBoundingClientRect();
+        let top = rect.bottom + 8;
+        let left = rect.left;
+        if (top + tipRect.height > window.innerHeight - 10) top = rect.top - tipRect.height - 8;
+        if (left + tipRect.width > window.innerWidth - 10) left = window.innerWidth - tipRect.width - 10;
+        if (left < 10) left = 10;
+        tooltip.style.top = top + 'px';
+        tooltip.style.left = left + 'px';
+      }
+      function hideTooltip() {
+        if (!tooltip) return;
+        tooltip.classList.remove('show');
+        activeTooltipKey = null;
+      }
+      document.addEventListener('click', () => hideTooltip());
       function buildRows() {
         statsPanel.innerHTML = '';
         STATS.forEach(stat => {
@@ -675,7 +777,14 @@
         <span class="stat-plus">+</span>
         <div class="stat-info">
           <div class="stat-label-row">
-            <span class="stat-name">${stat.label}</span>
+            <span class="stat-name" id="label-${stat.key}" title="Haz click o pasa el mouse para información">
+              ${stat.label}
+              <svg class="stat-help-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </span>
             <span class="stat-goal-label">Meta: ${stat.key === 'atq' ? '80k' : (stat.key === 'crit' ? '50% (12k RAW vs debuffs)' : stat.goal + stat.unit)}</span>
           </div>
           <div class="stat-bar-track">
@@ -692,6 +801,17 @@
             values[stat.key] = parseFloat(this.value) || 0;
             updateBar(stat.key);
             updateRank();
+          });
+          const labelEl = row.querySelector(`#label-${stat.key}`);
+          labelEl.addEventListener('mouseenter', () => showTooltip(stat.key, labelEl));
+          labelEl.addEventListener('mouseleave', () => hideTooltip());
+          labelEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (activeTooltipKey === stat.key) {
+              hideTooltip();
+            } else {
+              showTooltip(stat.key, labelEl);
+            }
           });
         });
       }
