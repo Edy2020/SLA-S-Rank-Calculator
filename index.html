@@ -415,6 +415,157 @@
         grid-template-columns: 1fr;
       }
     }
+    .set-highlight-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .set-highlight__header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bg-card-border);
+    }
+    .set-highlight__icon {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .set-highlight__title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 1;
+      min-width: 0;
+    }
+    .set-highlight__title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .set-highlight__badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .set-highlight__class-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .set-highlight__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .set-panel {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 4px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .set-panel__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .set-panel__pieces {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.06em;
+    }
+    .set-panel__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .set-panel__list li {
+      font-size: 0.74rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      position: relative;
+      padding-left: 12px;
+    }
+    .set-panel__list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--text-secondary);
+    }
+    .set-panel__list li strong {
+      color: var(--text-primary);
+    }
+    .tag-effect {
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      display: inline-block;
+    }
+    .tag--green {
+      color: #34d399;
+      background: rgba(52, 211, 153, 0.12);
+    }
+    .tag--cyan {
+      color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.12);
+    }
+    .set-highlight__bottom {
+      background: rgba(255, 255, 255, 0.02);
+      border-top: 1px solid var(--bg-card-border);
+      padding-top: 10px;
+      font-size: 0.74rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+    .set-bottom__label {
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .set-highlight__bottom strong {
+      color: var(--text-primary);
+    }
+    @media (max-width: 768px) {
+      .set-highlight__header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .set-highlight__grid { grid-template-columns: 1fr; }
+    }
     .guide-card {
       background: var(--bg-card);
       border: 1px solid var(--bg-card-border);
@@ -460,13 +611,46 @@
       letter-spacing: 0.05em;
       font-size: 0.85rem;
     }
+    .guide-card__content-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .guide-slot-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .guide-card__item:hover .guide-slot-icon-wrap {
+      transform: scale(1.05);
+      box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+      border-color: var(--accent-cyan);
+    }
+    .guide-slot-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
     .guide-card__substats-list {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 2px;
-      padding-left: 4px;
-      margin-top: 2px;
+      padding-left: 0;
+      margin-top: 0;
+      flex: 1;
+      min-width: 0;
     }
     .guide-card__substats-list li {
       font-size: 0.7rem;
@@ -538,6 +722,48 @@
     </section>
     <section class="guide-section">
       <h2 class="guide-title">Recomendación de Artefactos (DPS / Jinwoo)</h2>
+      <div class="set-highlight-card">
+        <div class="set-highlight__header">
+          <img class="set-highlight__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/1/17/Helmet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020623" alt="Veneno Azul del Arquitecto" crossorigin="anonymous">
+          <div class="set-highlight__title-wrap">
+            <h3 class="set-highlight__title">Veneno Azul del Arquitecto</h3>
+            <span class="set-highlight__badge">META DPS • NV. 120</span>
+          </div>
+          <span class="set-highlight__class-pill">Sung Jinwoo / Atacantes</span>
+        </div>
+
+        <div class="set-highlight__grid">
+          <div class="set-panel">
+            <div class="set-panel__header">
+              <span class="set-panel__pieces">4 PIEZAS</span>
+              <span class="tag-effect tag--green">[Veneno]</span>
+            </div>
+            <ul class="set-panel__list">
+              <li><strong>+20% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
+              <li><strong>+1% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +30%</strong>).</li>
+              <li><strong>Duración:</strong> Permanente.</li>
+            </ul>
+          </div>
+
+          <div class="set-panel">
+            <div class="set-panel__header">
+              <span class="set-panel__pieces">8 PIEZAS</span>
+              <span class="tag-effect tag--cyan">[Veneno Azul]</span>
+            </div>
+            <ul class="set-panel__list">
+              <li><strong>+20% Pen. Defensa</strong> directa contra objetivos.</li>
+              <li><strong>+30% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
+              <li><strong>+2.5% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +75%</strong>).</li>
+              <li><strong>Duración:</strong> Permanente.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="set-highlight__bottom">
+          <span class="set-bottom__label">Sincronización de Clase:</span>
+          <span class="set-bottom__text"><strong>+50% Daño Total Infligido</strong> al equipar en Sung Jinwoo o Atacantes (desactiva Veneno base) • <strong>+30% Daño a Aliados</strong> en modo Combate en Equipo (máx. 2 cargas = <strong>+60%</strong>).</span>
+        </div>
+      </div>
       <div class="guide-grid">
         <div class="guide-card">
           <div class="guide-card__header">Reliquias (Set Izquierdo)</div>
@@ -547,48 +773,68 @@
                 <span class="guide-card__slot">Casco</span>
                 <span class="guide-card__stat">ATQ (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ Adicional</li>
-                <li>Índice de Golpe Crítico (%)</li>
-                <li>Pen. Def (%)</li>
-                <li>Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/1/17/Helmet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020623" alt="Casco" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ Adicional</li>
+                  <li>Índice de Golpe Crítico (%)</li>
+                  <li>Pen. Def (%)</li>
+                  <li>Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Armadura</span>
                 <span class="guide-card__stat">DEF (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ (%)</li>
-                <li>ATQ Adicional</li>
-                <li>Índice de Golpe Crítico (%)</li>
-                <li>Pen. Def (%) / Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/9/91/Body_Armor_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020630" alt="Armadura" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ (%)</li>
+                  <li>ATQ Adicional</li>
+                  <li>Índice de Golpe Crítico (%)</li>
+                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Guantes</span>
                 <span class="guide-card__stat">ATQ (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ Adicional</li>
-                <li>Índice de Golpe Crítico (%)</li>
-                <li>Pen. Def (%)</li>
-                <li>Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/0/0a/Gloves_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020637" alt="Guantes" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ Adicional</li>
+                  <li>Índice de Golpe Crítico (%)</li>
+                  <li>Pen. Def (%)</li>
+                  <li>Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Botas</span>
                 <span class="guide-card__stat">Daño Crítico (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ (%)</li>
-                <li>ATQ Adicional</li>
-                <li>Índice de Golpe Crítico (%)</li>
-                <li>Pen. Def (%) / Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/a/ac/Boots_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020644" alt="Botas" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ (%)</li>
+                  <li>ATQ Adicional</li>
+                  <li>Índice de Golpe Crítico (%)</li>
+                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
@@ -600,48 +846,68 @@
                 <span class="guide-card__slot">Collar</span>
                 <span class="guide-card__stat">PS (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ (%)</li>
-                <li>ATQ Adicional</li>
-                <li>Daño Crit (%)</li>
-                <li>Pen. Def (%) / Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/0/0b/Necklace_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020653" alt="Collar" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ (%)</li>
+                  <li>ATQ Adicional</li>
+                  <li>Daño Crit (%)</li>
+                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Pulsera</span>
                 <span class="guide-card__stat">Daño Elemental (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ (%)</li>
-                <li>ATQ Adicional</li>
-                <li>Daño Crit (%)</li>
-                <li>Pen. Def (%) / Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/8/8b/Bracelet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020658" alt="Pulsera" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ (%)</li>
+                  <li>ATQ Adicional</li>
+                  <li>Daño Crit (%)</li>
+                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Anillo</span>
                 <span class="guide-card__stat">ATQ (%)</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ Adicional</li>
-                <li>Daño Crit (%)</li>
-                <li>Pen. Def (%)</li>
-                <li>Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/d/da/Ring_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020705" alt="Anillo" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ Adicional</li>
+                  <li>Daño Crit (%)</li>
+                  <li>Pen. Def (%)</li>
+                  <li>Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
                 <span class="guide-card__slot">Pendientes</span>
                 <span class="guide-card__stat">PM Adicional</span>
               </div>
-              <ul class="guide-card__substats-list">
-                <li>ATQ (%)</li>
-                <li>ATQ Adicional</li>
-                <li>Daño Crit (%)</li>
-                <li>Pen. Def (%) / Aum. Daño (%)</li>
-              </ul>
+              <div class="guide-card__content-row">
+                <div class="guide-slot-icon-wrap">
+                  <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/a/a0/Earrings_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020710" alt="Pendientes" crossorigin="anonymous">
+                </div>
+                <ul class="guide-card__substats-list">
+                  <li>ATQ (%)</li>
+                  <li>ATQ Adicional</li>
+                  <li>Daño Crit (%)</li>
+                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                </ul>
+              </div>
             </li>
           </ul>
         </div>
