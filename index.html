@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auditor de Cuentas — Solo Leveling: Arise</title>
+  <title>S Rank Calculator — Solo Leveling: Arise</title>
   <meta name="description" content="Herramienta de auditoría automática de estadísticas para Solo Leveling: Arise con OCR integrado.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -365,7 +365,7 @@
     }
     .advice-card__text {
       font-size: 0.75rem;
-      color: var(--text-secondary);
+      color: #ffffff;
       line-height: 1.45;
     }
     .advice-card__tag {
@@ -471,7 +471,7 @@
     .set-highlight__class-pill {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--bg-card-border);
-      color: var(--text-secondary);
+      color: #ffffff;
       padding: 4px 10px;
       border-radius: 4px;
       font-size: 0.72rem;
@@ -517,7 +517,7 @@
     }
     .set-panel__list li {
       font-size: 0.74rem;
-      color: var(--text-secondary);
+      color: #ffffff;
       line-height: 1.45;
       position: relative;
       padding-left: 12px;
@@ -526,10 +526,10 @@
       content: '▸';
       position: absolute;
       left: 0;
-      color: var(--text-secondary);
+      color: var(--accent-cyan);
     }
     .set-panel__list li strong {
-      color: var(--text-primary);
+      color: var(--accent-cyan);
     }
     .tag-effect {
       font-weight: 700;
@@ -552,7 +552,7 @@
       padding-top: 10px;
       font-size: 0.74rem;
       line-height: 1.5;
-      color: var(--text-secondary);
+      color: #ffffff;
     }
     .set-bottom__label {
       color: var(--text-primary);
@@ -560,7 +560,7 @@
       margin-right: 6px;
     }
     .set-highlight__bottom strong {
-      color: var(--text-primary);
+      color: var(--accent-cyan);
     }
     @media (max-width: 768px) {
       .set-highlight__header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -628,13 +628,6 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.18);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    .guide-card__item:hover .guide-slot-icon-wrap {
-      transform: scale(1.05);
-      box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
-      border-color: var(--accent-cyan);
     }
     .guide-slot-icon {
       width: 100%;
@@ -654,7 +647,7 @@
     }
     .guide-card__substats-list li {
       font-size: 0.7rem;
-      color: var(--text-secondary);
+      color: #ffffff;
       font-weight: 500;
       letter-spacing: 0.02em;
       position: relative;
@@ -674,6 +667,68 @@
       text-align: right;
       font-size: 0.82rem;
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+    .cores-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .core-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .core-card__icon {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .core-card__info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .core-card__header {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      row-gap: 6px;
+      flex-wrap: wrap;
+    }
+    .core-card__title {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.03em;
+      margin: 0;
+    }
+    .core-card__body {
+      font-size: 0.76rem;
+      color: #ffffff;
+      line-height: 1.5;
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 0 4px 4px 0;
+      padding: 10px 14px;
+    }
+    .core-card__body strong {
+      color: var(--accent-cyan);
+    }
+    @media (max-width: 650px) {
+      .core-card { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
   </style>
 </head>
@@ -717,11 +772,11 @@
     </div>
     <div class="stats-panel" id="stats-panel"></div>
     <section class="advice-section" id="advice-section">
-      <h2 class="guide-title">💡 Diagnóstico y Consejos de Optimización</h2>
+      <h2 class="guide-title">Diagnóstico y Consejos de Optimización</h2>
       <div class="advice-content" id="advice-content"></div>
     </section>
     <section class="guide-section">
-      <h2 class="guide-title">Recomendación de Artefactos (DPS / Jinwoo)</h2>
+      <h2 class="guide-title">Recomendación de Artefactos<span style="color: var(--accent-cyan);">(DPS / Jinwoo)</span></h2>
       <div class="set-highlight-card">
         <div class="set-highlight__header">
           <img class="set-highlight__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/1/17/Helmet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020623" alt="Veneno Azul del Arquitecto" crossorigin="anonymous">
@@ -731,7 +786,6 @@
           </div>
           <span class="set-highlight__class-pill">Sung Jinwoo / Atacantes</span>
         </div>
-
         <div class="set-highlight__grid">
           <div class="set-panel">
             <div class="set-panel__header">
@@ -744,7 +798,6 @@
               <li><strong>Duración:</strong> Permanente.</li>
             </ul>
           </div>
-
           <div class="set-panel">
             <div class="set-panel__header">
               <span class="set-panel__pieces">8 PIEZAS</span>
@@ -758,7 +811,6 @@
             </ul>
           </div>
         </div>
-
         <div class="set-highlight__bottom">
           <span class="set-bottom__label">Sincronización de Clase:</span>
           <span class="set-bottom__text"><strong>+50% Daño Total Infligido</strong> al equipar en Sung Jinwoo o Atacantes (desactiva Veneno base) • <strong>+30% Daño a Aliados</strong> en modo Combate en Equipo (máx. 2 cargas = <strong>+60%</strong>).</span>
@@ -911,6 +963,57 @@
             </li>
           </ul>
         </div>
+      </div>
+      <h2 class="guide-title" style="margin-top: 28px;">Recomendación de Núcleos (Cores)</h2>
+      <div class="cores-grid">
+        <div class="core-card">
+          <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/e/e3/Ferocious_Protector%27s_Desire.png/revision/latest/scale-to-width-down/100?cb=20260214083800" alt="Deseo del Protector Feroz" crossorigin="anonymous">
+          <div class="core-card__info">
+            <div class="core-card__header">
+              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(ATQ %) ─</span> Deseo del Protector Feroz</h3>
+              <span class="tag-effect tag--cyan">Crítico • Ofensivo</span>
+            </div>
+            <div class="core-card__body">
+              Aumenta el <strong>Índice de Golpe Crítico</strong> del usuario en un <strong>+10%</strong>.
+            </div>
+          </div>
+        </div>
+        <div class="core-card">
+          <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/6/62/Arrogant_Ruler%27s_Will.png/revision/latest/scale-to-width-down/100?cb=20260214083832" alt="Voluntad del Soberano Arrogante" crossorigin="anonymous">
+          <div class="core-card__info">
+            <div class="core-card__header">
+              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(DEF %) ─</span> Voluntad del Soberano Arrogante</h3>
+              <span class="tag-effect tag--cyan">Escudo • Supervivencia</span>
+            </div>
+            <div class="core-card__body">
+              Al usar la Habilidad Básica, otorga un <strong>Escudo</strong> equivalente al <strong>10%</strong> de su Ataque durante <strong>10 segundos</strong> (Recarga: <strong>45 s</strong>).
+            </div>
+          </div>
+        </div>
+        <div class="core-card">
+          <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/3/31/Teeth_of_the_Watcher.png/revision/latest/scale-to-width-down/100?cb=20250119221238" alt="Dientes del Vigilante" crossorigin="anonymous">
+          <div class="core-card__info">
+            <div class="core-card__header">
+              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(PS %) ─</span> Dientes del Vigilante</h3>
+              <span class="tag-effect tag--cyan">Eficiencia • PM</span>
+            </div>
+            <div class="core-card__body">
+              Disminuye la Tasa de Recuperación de PM en un <strong>10%</strong> y reduce el <strong>Consumo de PM</strong> de las Habilidades Básicas en un <strong>12%</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="guide-card" style="margin-top: 14px;">
+        <div class="guide-card__header">SUBESTADÍSTICAS RECOMENDADAS (BALANCE DE JINWOO)</div>
+        <p style="font-size: 0.74rem; color: #ffffff; line-height: 1.5; margin: 0 0 10px 0;">
+          Depende de lo que necesites para equilibrar Jinwoo, priorizando las siguientes:
+        </p>
+        <ul class="guide-card__substats-list" style="gap: 6px;">
+          <li>Índice de Golpe Crítico (%)</li>
+          <li>Daño Crítico (%)</li>
+          <li>Penetración de Defensa (%)</li>
+          <li>Aumento de Daño (%)</li>
+        </ul>
       </div>
     </section>
     <footer class="footer">
@@ -1210,7 +1313,7 @@
             <div class="advice-card ${cardClass}">
               <div class="advice-card__title">
                 <span class="advice-card__tag ${tagClass}">${tagText}</span>
-                <span>Enfocar recursos en: ${item.label} (${item.pct.toFixed(1)}% del meta)</span>
+                <span>Enfocar recursos en: ${item.label}</span>
               </div>
               <div class="advice-card__text">
                 ${adviceMap[item.key] || 'Optimiza los substats de tus artefactos para subir esta estadística.'}
