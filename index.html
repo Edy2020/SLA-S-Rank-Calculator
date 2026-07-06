@@ -280,6 +280,68 @@
       position:fixed;inset:0;pointer-events:none;z-index:2;
       background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,.008) 2px,rgba(0,240,255,.008) 4px);
     }
+    .advice-section {
+      margin-top: 28px;
+      animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-delay: 0.3s;
+    }
+    .advice-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .advice-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 12px 14px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .advice-card:hover {
+      transform: translateX(2px);
+    }
+    .advice-card--warn {
+      border-left-color: #ff9f43;
+      background: rgba(255, 159, 67, 0.04);
+    }
+    .advice-card--critical {
+      border-left-color: var(--accent-pink);
+      background: rgba(255, 0, 85, 0.05);
+    }
+    .advice-card--success {
+      border-left-color: #00d26a;
+      background: rgba(0, 210, 106, 0.05);
+    }
+    .advice-card__title {
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.02em;
+    }
+    .advice-card__text {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .advice-card__tag {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag--critical { background: rgba(255, 0, 85, 0.2); color: var(--accent-pink); }
+    .tag--warn { background: rgba(255, 159, 67, 0.2); color: #ff9f43; }
+    .tag--info { background: rgba(0, 240, 255, 0.2); color: var(--accent-cyan); }
+    .tag--success { background: rgba(0, 210, 106, 0.2); color: #00d26a; }
     .guide-section {
       margin-top: 28px;
       animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -432,6 +494,10 @@
       </div>
     </div>
     <div class="stats-panel" id="stats-panel"></div>
+    <section class="advice-section" id="advice-section">
+      <h2 class="guide-title">💡 Diagnóstico y Consejos de Optimización</h2>
+      <div class="advice-content" id="advice-content"></div>
+    </section>
     <section class="guide-section">
       <h2 class="guide-title">Recomendación de Artefactos (DPS / Jinwoo)</h2>
       <div class="guide-grid">
@@ -695,6 +761,77 @@
         rankLetter.textContent = rank;
         rankPercent.textContent = avgPct.toFixed(1) + '%';
         rankSection.className = 'rank-section ' + cls;
+        updateAdvice();
+      }
+      function updateAdvice() {
+        const adviceContent = $('advice-content');
+        if (!adviceContent) return;
+        const hasData = STATS.some(s => values[s.key] > 0);
+        if (!hasData) {
+          adviceContent.innerHTML = `
+            <div class="advice-card">
+              <div class="advice-card__title">
+                <span class="advice-card__tag tag--info">Guía de Optimización</span>
+                <span>¡Empieza a analizar tus estadísticas!</span>
+              </div>
+              <div class="advice-card__text">
+                Ingresa los valores de tu Jinwoo o DPS (manualmente o mediante captura OCR) para recibir un diagnóstico en tiempo real. Te indicaremos qué stats están por debajo de la media meta y a qué artefactos debes enfocar tus recursos.
+              </div>
+            </div>`;
+          return;
+        }
+        const evaluations = STATS.map(s => {
+          const pct = Math.min((values[s.key] / s.goal) * 100, 100);
+          return { ...s, pct };
+        });
+        const needsImprovement = evaluations.filter(e => e.pct < 100).sort((a, b) => a.pct - b.pct);
+        if (needsImprovement.length === 0) {
+          adviceContent.innerHTML = `
+            <div class="advice-card advice-card--success">
+              <div class="advice-card__title">
+                <span class="advice-card__tag tag--success">¡Build Excelente!</span>
+                <span>Estadísticas en nivel competitivo óptimo</span>
+              </div>
+              <div class="advice-card__text">
+                ¡Felicidades! Todas tus estadísticas cumplen o superan los objetivos del meta actual para el Rango S. Tu DPS tiene el equilibrio ideal para superar el contenido más exigente (jefes de gremio, taller de luz brillante, etc.).
+              </div>
+            </div>`;
+          return;
+        }
+        const adviceMap = {
+          'atq': "Tu Ataque está por debajo de la meta de 80,000 pts. Para aumentar tu ATQ base y porcentual rápidamente, sube a nivel +20 tus artefactos del set izquierdo (en especial Casco y Guantes con substats de ATQ Adicional y ATQ %). En accesorios, busca joyas (como el Anillo) con stat principal de ATQ (%).",
+          'pre': "Tu Precisión se encuentra por debajo del meta (95%). En combates contra jefes de alto nivel, la falta de precisión provoca ataques fallidos y una pérdida masiva de DPS constante. Asigna puntos de estado a Percepción o prioriza substats de Precisión (%) en tu set de accesorios.",
+          'crit': "Tu Índice de Golpe Crítico o su valor RAW necesita refuerzo. Recuerda el límite meta del 50% y el colchón de 12,000 puntos RAW para contrarrestar las reducciones y resistencias a críticos de los jefes endgame. Enfoca la búsqueda de este substat en tus piezas de armadura (set izquierdo).",
+          'critdmg': "Tu Daño Crítico no alcanza el 210% recomendado. Para lograr el daño explosivo característico de un DPS en Rango S, es fundamental equipar unas Botas con stat principal de Daño Crítico (%) y acumular este substat en cada pieza de tu set derecho (Collar, Pulsera, Anillo, Pendientes).",
+          'pen': "Tu Penetración de Defensa está por debajo del 40%. Los bosses endgame cuentan con defensas muy elevadas; incrementar tu Pen. Def (%) mediante substats te permitirá ignorar esa mitigación y maximizar el daño real de cada habilidad.",
+          'aumdmg': "Tu Aumento de Daño está por debajo del 40%. Este es uno de los multiplicadores más valiosos del juego para potenciar tu daño final. Asegúrate de equipar una Esfera/Pulsera con stat principal de Daño Elemental y priorizar substats de Aum. Daño (%) en tus artefactos."
+        };
+        let html = '';
+        needsImprovement.forEach((item, idx) => {
+          let tagClass = 'tag--info';
+          let tagText = 'Mejora Recomendada';
+          let cardClass = '';
+          if (idx === 0 && item.pct < 75) {
+            tagClass = 'tag--critical';
+            tagText = 'Prioridad Máxima';
+            cardClass = 'advice-card--critical';
+          } else if (item.pct < 85) {
+            tagClass = 'tag--warn';
+            tagText = 'Atención';
+            cardClass = 'advice-card--warn';
+          }
+          html += `
+            <div class="advice-card ${cardClass}">
+              <div class="advice-card__title">
+                <span class="advice-card__tag ${tagClass}">${tagText}</span>
+                <span>Enfocar recursos en: ${item.label} (${item.pct.toFixed(1)}% del meta)</span>
+              </div>
+              <div class="advice-card__text">
+                ${adviceMap[item.key] || 'Optimiza los substats de tus artefactos para subir esta estadística.'}
+              </div>
+            </div>`;
+        });
+        adviceContent.innerHTML = html;
       }
       function showToast(msg) {
         toast.textContent = msg;
