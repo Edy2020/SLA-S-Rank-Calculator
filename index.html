@@ -46,7 +46,28 @@
       max-width:600px;margin:0 auto;
       padding:24px 16px 48px;
     }
-    .header{text-align:center;margin-bottom:28px}
+    .header{text-align:center;margin-bottom:28px;position:relative}
+    .lang-switcher{
+      position:absolute;top:0;right:0;
+      display:flex;align-items:center;gap:4px;
+      background:rgba(10,22,40,0.85);border:1px solid var(--bg-card-border);
+      border-radius:20px;padding:3px 6px;backdrop-filter:blur(8px);
+      box-shadow:0 0 15px rgba(0,240,255,0.15);z-index:10;
+    }
+    .lang-btn{
+      background:none;border:none;color:var(--text-secondary);
+      font-family:var(--font-main);font-size:0.7rem;font-weight:700;
+      cursor:pointer;padding:3px 10px;border-radius:14px;
+      transition:all 0.3s cubic-bezier(0.16,1,0.3,1);letter-spacing:0.1em;
+    }
+    .lang-btn:hover{color:var(--text-primary)}
+    .lang-btn.active{
+      background:rgba(0,240,255,0.15);color:var(--accent-cyan);
+      box-shadow:0 0 10px rgba(0,240,255,0.3);border:1px solid rgba(0,240,255,0.3);
+    }
+    @media(max-width:480px){
+      .lang-switcher{position:static;justify-content:center;margin-bottom:12px;width:fit-content;margin-left:auto;margin-right:auto}
+    }
     .header__subtitle{
       font-size:.7rem;font-weight:600;
       color:var(--accent-cyan);
@@ -739,8 +760,12 @@
   <div class="scanline-overlay"></div>
   <div class="app-container">
     <header class="header">
-      <p class="header__subtitle">Solo Leveling: Arise</p>
-      <h1 class="header__title">S Rank Calculator</h1>
+      <div class="lang-switcher">
+        <button class="lang-btn active" id="btn-es" onclick="setLanguage('es')">ES</button>
+        <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</button>
+      </div>
+      <p class="header__subtitle" data-i18n="header_subtitle">Solo Leveling: Arise</p>
+      <h1 class="header__title" data-i18n="header_title">S Rank Calculator</h1>
       <div class="header__line"></div>
     </header>
     <section class="rank-section rank-e" id="rank-section">
@@ -749,233 +774,233 @@
         <div class="rank-hex__border rank-hex__border--inner"></div>
         <span class="rank-letter" id="rank-letter">E</span>
       </div>
-      <span class="rank-label">Rango General</span>
+      <span class="rank-label" data-i18n="rank_label">Rango General</span>
       <span class="rank-percent" id="rank-percent">0.0%</span>
     </section>
     <div class="dropzone" id="dropzone">
       <div class="dropzone__icon">⬆</div>
-      <p class="dropzone__text">Arrastra tu captura aquí</p>
-      <p class="dropzone__subtext">o haz clic para seleccionar</p>
+      <p class="dropzone__text" data-i18n="dropzone_text">Arrastra tu captura aquí</p>
+      <p class="dropzone__subtext" data-i18n="dropzone_subtext">o haz clic para seleccionar</p>
       <input type="file" id="file-input" accept="image/*">
     </div>
     <div class="ocr-preview" id="ocr-preview">
       <img id="ocr-preview-img" src="" alt="Captura escaneada">
       <div class="scan-overlay" id="scan-overlay">
         <div class="scan-spinner"></div>
-        <span class="scan-label" id="scan-label">Escaneando...</span>
+        <span class="scan-label" id="scan-label" data-i18n="scan_label">Escaneando...</span>
         <div class="scan-bar-track">
           <div class="scan-bar-fill" id="scan-bar-fill"></div>
         </div>
       </div>
       <div class="ocr-preview__bar">
-        <span class="ocr-preview__label">Imagen escaneada</span>
-        <button class="ocr-preview__close" id="ocr-close-btn">✕ Cerrar</button>
+        <span class="ocr-preview__label" data-i18n="ocr_preview_label">Imagen escaneada</span>
+        <button class="ocr-preview__close" id="ocr-close-btn" data-i18n="ocr_close_btn">✕ Cerrar</button>
       </div>
     </div>
     <div class="stats-panel" id="stats-panel"></div>
     <section class="advice-section" id="advice-section">
-      <h2 class="guide-title">Diagnóstico y Consejos de Optimización</h2>
+      <h2 class="guide-title" data-i18n="advice_title">Diagnóstico y Consejos de Optimización</h2>
       <div class="advice-content" id="advice-content"></div>
     </section>
     <section class="guide-section">
-      <h2 class="guide-title">Recomendación de Artefactos<span style="color: var(--accent-cyan);">(DPS / Jinwoo)</span></h2>
+      <h2 class="guide-title" data-i18n-html="guide_title_1">Recomendación de Artefactos<span style="color: var(--accent-cyan);">(DPS / Jinwoo)</span></h2>
       <div class="set-highlight-card">
         <div class="set-highlight__header">
           <img class="set-highlight__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/1/17/Helmet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020623" alt="Veneno Azul del Arquitecto" crossorigin="anonymous">
           <div class="set-highlight__title-wrap">
-            <h3 class="set-highlight__title">Veneno Azul del Arquitecto</h3>
-            <span class="set-highlight__badge">META DPS • NV. 120</span>
+            <h3 class="set-highlight__title" data-i18n="set_title">Veneno Azul del Arquitecto</h3>
+            <span class="set-highlight__badge" data-i18n="set_badge">META DPS • NV. 120</span>
           </div>
-          <span class="set-highlight__class-pill">Sung Jinwoo / Atacantes</span>
+          <span class="set-highlight__class-pill" data-i18n="set_class">Sung Jinwoo / Atacantes</span>
         </div>
         <div class="set-highlight__grid">
           <div class="set-panel">
             <div class="set-panel__header">
-              <span class="set-panel__pieces">4 PIEZAS</span>
-              <span class="tag-effect tag--green">[Veneno]</span>
+              <span class="set-panel__pieces" data-i18n="set_4pc">4 PIEZAS</span>
+              <span class="tag-effect tag--green" data-i18n="set_4pc_tag">[Veneno]</span>
             </div>
             <ul class="set-panel__list">
-              <li><strong>+20% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
-              <li><strong>+1% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +30%</strong>).</li>
-              <li><strong>Duración:</strong> Permanente.</li>
+              <li data-i18n-html="set_4pc_l1"><strong>+20% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
+              <li data-i18n-html="set_4pc_l2"><strong>+1% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +30%</strong>).</li>
+              <li data-i18n-html="set_4pc_l3"><strong>Duración:</strong> Permanente.</li>
             </ul>
           </div>
           <div class="set-panel">
             <div class="set-panel__header">
-              <span class="set-panel__pieces">8 PIEZAS</span>
-              <span class="tag-effect tag--cyan">[Veneno Azul]</span>
+              <span class="set-panel__pieces" data-i18n="set_8pc">8 PIEZAS</span>
+              <span class="tag-effect tag--cyan" data-i18n="set_8pc_tag">[Veneno Azul]</span>
             </div>
             <ul class="set-panel__list">
-              <li><strong>+20% Pen. Defensa</strong> directa contra objetivos.</li>
-              <li><strong>+30% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
-              <li><strong>+2.5% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +75%</strong>).</li>
-              <li><strong>Duración:</strong> Permanente.</li>
+              <li data-i18n-html="set_8pc_l1"><strong>+20% Pen. Defensa</strong> directa contra objetivos.</li>
+              <li data-i18n-html="set_8pc_l2"><strong>+30% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.</li>
+              <li data-i18n-html="set_8pc_l3"><strong>+2.5% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +75%</strong>).</li>
+              <li data-i18n-html="set_8pc_l4"><strong>Duración:</strong> Permanente.</li>
             </ul>
           </div>
         </div>
         <div class="set-highlight__bottom">
-          <span class="set-bottom__label">Sincronización de Clase:</span>
-          <span class="set-bottom__text"><strong>+50% Daño Total Infligido</strong> al equipar en Sung Jinwoo o Atacantes (desactiva Veneno base) • <strong>+30% Daño a Aliados</strong> en modo Combate en Equipo (máx. 2 cargas = <strong>+60%</strong>).</span>
+          <span class="set-bottom__label" data-i18n="set_sync_label">Sincronización de Clase:</span>
+          <span class="set-bottom__text" data-i18n-html="set_sync_text"><strong>+50% Daño Total Infligido</strong> al equipar en Sung Jinwoo o Atacantes (desactiva Veneno base) • <strong>+30% Daño a Aliados</strong> en modo Combate en Equipo (máx. 2 cargas = <strong>+60%</strong>).</span>
         </div>
       </div>
       <div class="guide-grid">
         <div class="guide-card">
-          <div class="guide-card__header">Reliquias (Set Izquierdo)</div>
+          <div class="guide-card__header" data-i18n="guide_left_title">Reliquias (Set Izquierdo)</div>
           <ul class="guide-card__list">
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Casco</span>
-                <span class="guide-card__stat">ATQ (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_helmet">Casco</span>
+                <span class="guide-card__stat" data-i18n="stat_atk_pct">ATQ (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/1/17/Helmet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020623" alt="Casco" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ Adicional</li>
-                  <li>Índice de Golpe Crítico (%)</li>
-                  <li>Pen. Def (%)</li>
-                  <li>Aum. Daño (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_rate">Índice de Golpe Crítico (%)</li>
+                  <li data-i18n="stat_def_pen">Pen. Def (%)</li>
+                  <li data-i18n="stat_dmg_inc">Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Armadura</span>
-                <span class="guide-card__stat">DEF (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_armor">Armadura</span>
+                <span class="guide-card__stat" data-i18n="stat_def_pct">DEF (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/9/91/Body_Armor_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020630" alt="Armadura" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ (%)</li>
-                  <li>ATQ Adicional</li>
-                  <li>Índice de Golpe Crítico (%)</li>
-                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                  <li data-i18n="stat_atk_pct">ATQ (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_rate">Índice de Golpe Crítico (%)</li>
+                  <li data-i18n="stat_def_pen_dmg_inc">Pen. Def (%) / Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Guantes</span>
-                <span class="guide-card__stat">ATQ (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_gloves">Guantes</span>
+                <span class="guide-card__stat" data-i18n="stat_atk_pct">ATQ (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/0/0a/Gloves_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020637" alt="Guantes" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ Adicional</li>
-                  <li>Índice de Golpe Crítico (%)</li>
-                  <li>Pen. Def (%)</li>
-                  <li>Aum. Daño (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_rate">Índice de Golpe Crítico (%)</li>
+                  <li data-i18n="stat_def_pen">Pen. Def (%)</li>
+                  <li data-i18n="stat_dmg_inc">Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Botas</span>
-                <span class="guide-card__stat">Daño Crítico (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_boots">Botas</span>
+                <span class="guide-card__stat" data-i18n="stat_crit_dmg">Daño Crítico (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/a/ac/Boots_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020644" alt="Botas" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ (%)</li>
-                  <li>ATQ Adicional</li>
-                  <li>Índice de Golpe Crítico (%)</li>
-                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                  <li data-i18n="stat_atk_pct">ATQ (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_rate">Índice de Golpe Crítico (%)</li>
+                  <li data-i18n="stat_def_pen_dmg_inc">Pen. Def (%) / Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
           </ul>
         </div>
         <div class="guide-card">
-          <div class="guide-card__header">Accesorios (Set Derecho)</div>
+          <div class="guide-card__header" data-i18n="guide_right_title">Accesorios (Set Derecho)</div>
           <ul class="guide-card__list">
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Collar</span>
-                <span class="guide-card__stat">PS (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_necklace">Collar</span>
+                <span class="guide-card__stat" data-i18n="stat_hp_pct">PS (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/0/0b/Necklace_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020653" alt="Collar" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ (%)</li>
-                  <li>ATQ Adicional</li>
-                  <li>Daño Crit (%)</li>
-                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                  <li data-i18n="stat_atk_pct">ATQ (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_dmg_short">Daño Crit (%)</li>
+                  <li data-i18n="stat_def_pen_dmg_inc">Pen. Def (%) / Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Pulsera</span>
-                <span class="guide-card__stat">Daño Elemental (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_bracelet">Pulsera</span>
+                <span class="guide-card__stat" data-i18n="stat_elem_dmg">Daño Elemental (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/8/8b/Bracelet_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020658" alt="Pulsera" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ (%)</li>
-                  <li>ATQ Adicional</li>
-                  <li>Daño Crit (%)</li>
-                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                  <li data-i18n="stat_atk_pct">ATQ (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_dmg_short">Daño Crit (%)</li>
+                  <li data-i18n="stat_def_pen_dmg_inc">Pen. Def (%) / Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Anillo</span>
-                <span class="guide-card__stat">ATQ (%)</span>
+                <span class="guide-card__slot" data-i18n="slot_ring">Anillo</span>
+                <span class="guide-card__stat" data-i18n="stat_atk_pct">ATQ (%)</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/d/da/Ring_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020705" alt="Anillo" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ Adicional</li>
-                  <li>Daño Crit (%)</li>
-                  <li>Pen. Def (%)</li>
-                  <li>Aum. Daño (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_dmg_short">Daño Crit (%)</li>
+                  <li data-i18n="stat_def_pen">Pen. Def (%)</li>
+                  <li data-i18n="stat_dmg_inc">Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
             <li class="guide-card__item">
               <div class="guide-card__row">
-                <span class="guide-card__slot">Pendientes</span>
-                <span class="guide-card__stat">PM Adicional</span>
+                <span class="guide-card__slot" data-i18n="slot_earrings">Pendientes</span>
+                <span class="guide-card__stat" data-i18n="stat_add_mp">PM Adicional</span>
               </div>
               <div class="guide-card__content-row">
                 <div class="guide-slot-icon-wrap">
                   <img class="guide-slot-icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/a/a0/Earrings_of_The_Architect%27s_Blue_Poison.png/revision/latest/scale-to-width-down/65?cb=20260316020710" alt="Pendientes" crossorigin="anonymous">
                 </div>
                 <ul class="guide-card__substats-list">
-                  <li>ATQ (%)</li>
-                  <li>ATQ Adicional</li>
-                  <li>Daño Crit (%)</li>
-                  <li>Pen. Def (%) / Aum. Daño (%)</li>
+                  <li data-i18n="stat_atk_pct">ATQ (%)</li>
+                  <li data-i18n="stat_add_atk">ATQ Adicional</li>
+                  <li data-i18n="stat_crit_dmg_short">Daño Crit (%)</li>
+                  <li data-i18n="stat_def_pen_dmg_inc">Pen. Def (%) / Aum. Daño (%)</li>
                 </ul>
               </div>
             </li>
           </ul>
         </div>
       </div>
-      <h2 class="guide-title" style="margin-top: 28px;">Recomendación de Núcleos (Cores)</h2>
+      <h2 class="guide-title" style="margin-top: 28px;" data-i18n="guide_cores_title">Recomendación de Núcleos (Cores)</h2>
       <div class="cores-grid">
         <div class="core-card">
           <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/e/e3/Ferocious_Protector%27s_Desire.png/revision/latest/scale-to-width-down/100?cb=20260214083800" alt="Deseo del Protector Feroz" crossorigin="anonymous">
           <div class="core-card__info">
             <div class="core-card__header">
-              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(ATQ %) ─</span> Deseo del Protector Feroz</h3>
-              <span class="tag-effect tag--cyan">Crítico • Ofensivo</span>
+              <h3 class="core-card__title" data-i18n-html="core_1_title"><span style="color: var(--accent-cyan);">(ATQ %) ─</span> Deseo del Protector Feroz</h3>
+              <span class="tag-effect tag--cyan" data-i18n="core_1_tag">Crítico • Ofensivo</span>
             </div>
-            <div class="core-card__body">
+            <div class="core-card__body" data-i18n-html="core_1_body">
               Aumenta el <strong>Índice de Golpe Crítico</strong> del usuario en un <strong>+10%</strong>.
             </div>
           </div>
@@ -984,10 +1009,10 @@
           <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/6/62/Arrogant_Ruler%27s_Will.png/revision/latest/scale-to-width-down/100?cb=20260214083832" alt="Voluntad del Soberano Arrogante" crossorigin="anonymous">
           <div class="core-card__info">
             <div class="core-card__header">
-              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(DEF %) ─</span> Voluntad del Soberano Arrogante</h3>
-              <span class="tag-effect tag--cyan">Escudo • Supervivencia</span>
+              <h3 class="core-card__title" data-i18n-html="core_2_title"><span style="color: var(--accent-cyan);">(DEF %) ─</span> Voluntad del Soberano Arrogante</h3>
+              <span class="tag-effect tag--cyan" data-i18n="core_2_tag">Escudo • Supervivencia</span>
             </div>
-            <div class="core-card__body">
+            <div class="core-card__body" data-i18n-html="core_2_body">
               Al usar la Habilidad Básica, otorga un <strong>Escudo</strong> equivalente al <strong>10%</strong> de su Ataque durante <strong>10 segundos</strong> (Recarga: <strong>45 s</strong>).
             </div>
           </div>
@@ -996,30 +1021,30 @@
           <img class="core-card__icon" src="https://static.wikia.nocookie.net/solo-leveling-arise/images/3/31/Teeth_of_the_Watcher.png/revision/latest/scale-to-width-down/100?cb=20250119221238" alt="Dientes del Vigilante" crossorigin="anonymous">
           <div class="core-card__info">
             <div class="core-card__header">
-              <h3 class="core-card__title"><span style="color: var(--accent-cyan);">(PS %) ─</span> Dientes del Vigilante</h3>
-              <span class="tag-effect tag--cyan">Eficiencia • PM</span>
+              <h3 class="core-card__title" data-i18n-html="core_3_title"><span style="color: var(--accent-cyan);">(PS %) ─</span> Dientes del Vigilante</h3>
+              <span class="tag-effect tag--cyan" data-i18n="core_3_tag">Eficiencia • PM</span>
             </div>
-            <div class="core-card__body">
+            <div class="core-card__body" data-i18n-html="core_3_body">
               Disminuye la Tasa de Recuperación de PM en un <strong>10%</strong> y reduce el <strong>Consumo de PM</strong> de las Habilidades Básicas en un <strong>12%</strong>.
             </div>
           </div>
         </div>
       </div>
       <div class="guide-card" style="margin-top: 14px;">
-        <div class="guide-card__header">SUBESTADÍSTICAS RECOMENDADAS (BALANCE DE JINWOO)</div>
-        <p style="font-size: 0.74rem; color: #ffffff; line-height: 1.5; margin: 0 0 10px 0;">
+        <div class="guide-card__header" data-i18n="guide_substats_title">SUBESTADÍSTICAS RECOMENDADAS (BALANCE DE JINWOO)</div>
+        <p style="font-size: 0.74rem; color: #ffffff; line-height: 1.5; margin: 0 0 10px 0;" data-i18n="guide_substats_desc">
           Depende de lo que necesites para equilibrar Jinwoo, priorizando las siguientes:
         </p>
         <ul class="guide-card__substats-list" style="gap: 6px;">
-          <li>Índice de Golpe Crítico (%)</li>
-          <li>Daño Crítico (%)</li>
-          <li>Penetración de Defensa (%)</li>
-          <li>Aumento de Daño (%)</li>
+          <li data-i18n="stat_crit_rate">Índice de Golpe Crítico (%)</li>
+          <li data-i18n="stat_crit_dmg">Daño Crítico (%)</li>
+          <li data-i18n="substat_pen">Penetración de Defensa (%)</li>
+          <li data-i18n="substat_dmg">Aumento de Daño (%)</li>
         </ul>
       </div>
     </section>
     <footer class="footer">
-      <p class="footer__text">Sistema de Análisis v1.0 — No oficial</p>
+      <p class="footer__text" data-i18n="footer_text">Sistema de Análisis v1.0 — No oficial</p>
     </footer>
   </div>
   <div class="stat-tooltip" id="stat-tooltip">
@@ -1031,6 +1056,307 @@
   <script>
     (function () {
       'use strict';
+      let currentLang = 'es';
+      try { currentLang = localStorage.getItem('sla_lang') || 'es'; } catch(e){}
+
+      const I18N_DICT = {
+        es: {
+          header_subtitle: 'Solo Leveling: Arise',
+          header_title: 'S Rank Calculator',
+          rank_label: 'Rango General',
+          dropzone_text: 'Arrastra tu captura aquí',
+          dropzone_subtext: 'o haz clic para seleccionar',
+          ocr_preview_label: 'Imagen escaneada',
+          ocr_close_btn: '✕ Cerrar',
+          scan_label: 'Escaneando...',
+          advice_title: 'Diagnóstico y Consejos de Optimización',
+          guide_title_1: 'Recomendación de Artefactos<span style="color: var(--accent-cyan);">(DPS / Jinwoo)</span>',
+          set_title: 'Veneno Azul del Arquitecto',
+          set_badge: 'META DPS • NV. 120',
+          set_class: 'Sung Jinwoo / Atacantes',
+          set_4pc: '4 PIEZAS',
+          set_8pc: '8 PIEZAS',
+          set_4pc_tag: '[Veneno]',
+          set_8pc_tag: '[Veneno Azul]',
+          set_4pc_l1: '<strong>+20% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.',
+          set_4pc_l2: '<strong>+1% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +30%</strong>).',
+          set_4pc_l3: '<strong>Duración:</strong> Permanente.',
+          set_8pc_l1: '<strong>+20% Pen. Defensa</strong> directa contra objetivos.',
+          set_8pc_l2: '<strong>+30% Daño</strong> en Ataque Básico, Habilidad Básica y Definitiva.',
+          set_8pc_l3: '<strong>+2.5% ATQ y DEF</strong> cada segundo en combate (máx. <strong>30 cargas = +75%</strong>).',
+          set_8pc_l4: '<strong>Duración:</strong> Permanente.',
+          set_sync_label: 'Sincronización de Clase:',
+          set_sync_text: '<strong>+50% Daño Total Infligido</strong> al equipar en Sung Jinwoo o Atacantes (desactiva Veneno base) • <strong>+30% Daño a Aliados</strong> en modo Combate en Equipo (máx. 2 cargas = <strong>+60%</strong>).',
+          guide_left_title: 'Reliquias (Set Izquierdo)',
+          slot_helmet: 'Casco',
+          slot_armor: 'Armadura',
+          slot_gloves: 'Guantes',
+          slot_boots: 'Botas',
+          stat_atk_pct: 'ATQ (%)',
+          stat_def_pct: 'DEF (%)',
+          stat_crit_dmg: 'Daño Crítico (%)',
+          stat_add_atk: 'ATQ Adicional',
+          stat_crit_rate: 'Índice de Golpe Crítico (%)',
+          stat_def_pen: 'Pen. Def (%)',
+          stat_dmg_inc: 'Aum. Daño (%)',
+          stat_def_pen_dmg_inc: 'Pen. Def (%) / Aum. Daño (%)',
+          guide_right_title: 'Accesorios (Set Derecho)',
+          slot_necklace: 'Collar',
+          slot_bracelet: 'Pulsera',
+          slot_ring: 'Anillo',
+          slot_earrings: 'Pendientes',
+          stat_hp_pct: 'PS (%)',
+          stat_elem_dmg: 'Daño Elemental (%)',
+          stat_crit_dmg_short: 'Daño Crit (%)',
+          stat_add_mp: 'PM Adicional',
+          guide_cores_title: 'Recomendación de Núcleos (Cores)',
+          core_1_title: '<span style="color: var(--accent-cyan);">(ATQ %) ─</span> Deseo del Protector Feroz',
+          core_1_tag: 'Crítico • Ofensivo',
+          core_1_body: 'Aumenta el <strong>Índice de Golpe Crítico</strong> del usuario en un <strong>+10%</strong>.',
+          core_2_title: '<span style="color: var(--accent-cyan);">(DEF %) ─</span> Voluntad del Soberano Arrogante',
+          core_2_tag: 'Escudo • Supervivencia',
+          core_2_body: 'Al usar la Habilidad Básica, otorga un <strong>Escudo</strong> equivalente al <strong>10%</strong> de su Ataque durante <strong>10 segundos</strong> (Recarga: <strong>45 s</strong>).',
+          core_3_title: '<span style="color: var(--accent-cyan);">(PS %) ─</span> Dientes del Vigilante',
+          core_3_tag: 'Eficiencia • PM',
+          core_3_body: 'Disminuye la Tasa de Recuperación de PM en un <strong>10%</strong> y reduce el <strong>Consumo de PM</strong> de las Habilidades Básicas en un <strong>12%</strong>.',
+          guide_substats_title: 'SUBESTADÍSTICAS RECOMENDADAS (BALANCE DE JINWOO)',
+          guide_substats_desc: 'Depende de lo que necesites para equilibrar Jinwoo, priorizando las siguientes:',
+          substat_pen: 'Penetración de Defensa (%)',
+          substat_dmg: 'Aumento de Daño (%)',
+          footer_text: 'Sistema de Análisis v1.0 — No oficial',
+          
+          stat_label_atq: 'ATQ',
+          stat_label_pre: 'PRE (%)',
+          stat_label_critdmg: 'DAÑO CRIT (%)',
+          stat_label_crit: 'CRIT (%)',
+          stat_label_pen: 'PEN (%)',
+          stat_label_aumdmg: 'AUM. DAÑO (%)',
+          goal_atq: '80k',
+          goal_crit: '50% (12k RAW vs debuffs)',
+          goal_prefix: 'Meta: ',
+          stat_title_attr: 'Haz click o pasa el mouse para información',
+
+          crit_safe_badge: '✓ RESISTente',
+          crit_safe_text: 'RAW {0} — Protegido vs debuffs',
+          crit_warn_badge: '⚠ PARCIAL',
+          crit_warn_text: 'RAW {0} — Vulnerable a debuffs altos (-30%)',
+          crit_danger_badge: '✕ VULNERABLE',
+          crit_danger_text: 'RAW {0} — Bosses reducirán tu crítico',
+
+          advice_init_tag: 'Guía de Optimización',
+          advice_init_title: '¡Empieza a analizar tus estadísticas!',
+          advice_init_desc: 'Ingresa los valores de tu Jinwoo o DPS (manualmente o mediante captura OCR) para recibir un diagnóstico en tiempo real. Te indicaremos qué stats están por debajo de la media meta y a qué artefactos debes enfocar tus recursos.',
+          advice_good_tag: '¡Build Excelente!',
+          advice_good_title: 'Estadísticas en nivel competitivo óptimo',
+          advice_good_desc: '¡Felicidades! Todas tus estadísticas cumplen o superan los objetivos del meta actual para el Rango S. Tu DPS tiene el equilibrio ideal para superar el contenido más exigente (jefes de gremio, taller de luz brillante, etc.).',
+          advice_tag_crit: 'Prioridad Máxima',
+          advice_tag_warn: 'Atención',
+          advice_tag_info: 'Mejora Recomendada',
+          advice_focus_prefix: 'Enfocar recursos en: ',
+          advice_map_atq: 'Tu Ataque está por debajo de la meta de 80,000 pts. Para aumentar tu ATQ base y porcentual rápidamente, sube a nivel +20 tus artefactos del set izquierdo (en especial Casco y Guantes con substats de ATQ Adicional y ATQ %). En accesorios, busca joyas (como el Anillo) con stat principal de ATQ (%).',
+          advice_map_pre: 'Tu Precisión se encuentra por debajo del meta (95%). En combates contra jefes de alto nivel, la falta de precisión provoca ataques fallidos y una pérdida masiva de DPS constante. Asigna puntos de estado a Percepción o prioriza substats de Precisión (%) en tu set de accesorios.',
+          advice_map_crit: 'Tu Índice de Golpe Crítico o su valor RAW necesita refuerzo. Recuerda el límite meta del 50% y el colchón de 12,000 puntos RAW para contrarrestar las reducciones y resistencias a críticos de los jefes endgame. Enfoca la búsqueda de este substat en tus piezas de armadura (set izquierdo).',
+          advice_map_critdmg: 'Tu Daño Crítico no alcanza el 210% recomendado. Para lograr el daño explosivo característico de un DPS en Rango S, es fundamental equipar unas Botas con stat principal de Daño Crítico (%) y acumular este substat en cada pieza de tu set derecho (Collar, Pulsera, Anillo, Pendientes).',
+          advice_map_pen: 'Tu Penetración de Defensa está por debajo del 40%. Los bosses endgame cuentan con defensas muy elevadas; incrementar tu Pen. Def (%) mediante substats te permitirá ignorar esa mitigación y maximizar el daño real de cada habilidad.',
+          advice_map_aumdmg: 'Tu Aumento de Daño está por debajo del 40%. Este es uno de los multiplicadores más valiosos del juego para potenciar tu daño final. Asegúrate de equipar una Esfera/Pulsera con stat principal de Daño Elemental y priorizar substats de Aum. Daño (%) en tus artefactos.',
+          advice_default_text: 'Optimiza los substats de tus artefactos para subir esta estadística.',
+
+          toast_scan_done: 'Escaneo completado',
+          toast_scan_err: 'Error en el escaneo',
+          toast_scan_init: 'Inicializando OCR...',
+          toast_scanning: 'Escaneando... {0}%',
+
+          tooltip_atq_title: '✦ ATQ (Ataque Base y Total)',
+          tooltip_atq_body: 'Es la base matemática sobre la cual se calcula el daño de todo tu kit de habilidades (ataques básicos, habilidades normales, definitivas y sombras).',
+          tooltip_atq_meta: '💡 Meta SLA: La gran mayoría de cazadores DPS y Jinwoo escalan con ATQ. Superar los 80,000 pts garantiza una base sólida para derribar jefes en contenido contrarreloj.',
+          tooltip_pre_title: '✦ PRE (%) (Precisión)',
+          tooltip_pre_body: 'Determina tu probabilidad de conectar impactos limpios sin sufrir penalización por fallo o evasión del enemigo.',
+          tooltip_pre_meta: '💡 Meta SLA: Contra jefes de nivel superior (números rojos), si tu precisión es menor al 95%, tus ataques fallarán ("Miss"), perdiendo hasta 50% de daño y rompiendo tus combos de crítico.',
+          tooltip_critdmg_title: '✦ DAÑO CRIT (%) (Daño Crítico)',
+          tooltip_critdmg_body: 'Multiplica el daño final de tu ataque cada vez que se activa un impacto crítico.',
+          tooltip_critdmg_meta: '💡 Meta SLA: Es la estadística clave para el daño explosivo (burst DPS). Se busca un mínimo de 210%. Para lograrlo, es indispensable equipar Botas con stat principal de Daño Crítico (%).',
+          tooltip_crit_title: '✦ CRIT (%) (Índice de Golpe Crítico)',
+          tooltip_crit_body: 'Es la probabilidad porcentual de que cualquiera de tus ataques se convierta en un golpe crítico.',
+          tooltip_crit_meta: '💡 Meta SLA: El juego tiene un límite estricto del 50%. Sin embargo, los jefes endgame aplican resistencias que reducen tu crítico; acumular ~12,000 pts RAW asegura mantener el 50% real ante debuffs.',
+          tooltip_pen_title: '✦ PEN (%) (Penetración de Defensa)',
+          tooltip_pen_body: 'Permite que tus ataques ignoren un porcentaje directo de la mitigación y armadura del enemigo.',
+          tooltip_pen_meta: '💡 Meta SLA: Los bosses en dificultades altas tienen defensas masivas. Una penetración sobre el 40% aumenta exponencialmente tu daño real sostenido al atravesar su armadura.',
+          tooltip_aumdmg_title: '✦ AUM. DAÑO (%) (Aumento de Daño / Elemental)',
+          tooltip_aumdmg_body: 'Es un multiplicador independiente que amplifica directamente todo el daño final infligido al enemigo.',
+          tooltip_aumdmg_meta: '💡 Meta SLA: Una de las estadísticas más valiosas del juego. Se obtiene en Esferas/Pulseras y substats. Al ser un multiplicador final, un 40%+ representa un salto gigantesco en tu DPS.'
+        },
+        en: {
+          header_subtitle: 'Solo Leveling: Arise',
+          header_title: 'S Rank Calculator',
+          rank_label: 'General Rank',
+          dropzone_text: 'Drag your screenshot here',
+          dropzone_subtext: 'or click to select',
+          ocr_preview_label: 'Scanned Image',
+          ocr_close_btn: '✕ Close',
+          scan_label: 'Scanning...',
+          advice_title: 'Diagnosis and Optimization Tips',
+          guide_title_1: 'Artifact Recommendation<span style="color: var(--accent-cyan);">(DPS / Jinwoo)</span>',
+          set_title: "Architect's Blue Poison",
+          set_badge: 'META DPS • LV. 120',
+          set_class: 'Sung Jinwoo / Attackers',
+          set_4pc: '4 PIECES',
+          set_8pc: '8 PIECES',
+          set_4pc_tag: '[Poison]',
+          set_8pc_tag: '[Blue Poison]',
+          set_4pc_l1: '<strong>+20% Damage</strong> on Basic Attack, Basic Skill, and Ultimate.',
+          set_4pc_l2: '<strong>+1% ATK and DEF</strong> every second in combat (max <strong>30 stacks = +30%</strong>).',
+          set_4pc_l3: '<strong>Duration:</strong> Permanent.',
+          set_8pc_l1: '<strong>+20% Def. Penetration</strong> directly against targets.',
+          set_8pc_l2: '<strong>+30% Damage</strong> on Basic Attack, Basic Skill, and Ultimate.',
+          set_8pc_l3: '<strong>+2.5% ATK and DEF</strong> every second in combat (max <strong>30 stacks = +75%</strong>).',
+          set_8pc_l4: '<strong>Duration:</strong> Permanent.',
+          set_sync_label: 'Class Synchronization:',
+          set_sync_text: '<strong>+50% Total Damage Dealt</strong> when equipped on Sung Jinwoo or Attackers (disables base Poison) • <strong>+30% Damage to Allies</strong> in Team Fight mode (max 2 stacks = <strong>+60%</strong>).',
+          guide_left_title: 'Relics (Left Set)',
+          slot_helmet: 'Helmet',
+          slot_armor: 'Armor',
+          slot_gloves: 'Gloves',
+          slot_boots: 'Boots',
+          stat_atk_pct: 'ATK (%)',
+          stat_def_pct: 'DEF (%)',
+          stat_crit_dmg: 'Crit Damage (%)',
+          stat_add_atk: 'Additional ATK',
+          stat_crit_rate: 'Crit Rate (%)',
+          stat_def_pen: 'Def. Pen. (%)',
+          stat_dmg_inc: 'Damage Increase (%)',
+          stat_def_pen_dmg_inc: 'Def. Pen. (%) / Damage Increase (%)',
+          guide_right_title: 'Accessories (Right Set)',
+          slot_necklace: 'Necklace',
+          slot_bracelet: 'Bracelet',
+          slot_ring: 'Ring',
+          slot_earrings: 'Earrings',
+          stat_hp_pct: 'HP (%)',
+          stat_elem_dmg: 'Elemental Damage (%)',
+          stat_crit_dmg_short: 'Crit Dmg (%)',
+          stat_add_mp: 'Additional MP',
+          guide_cores_title: 'Core Recommendation',
+          core_1_title: '<span style="color: var(--accent-cyan);">(ATK %) ─</span> Ferocious Protector\'s Desire',
+          core_1_tag: 'Critical • Offensive',
+          core_1_body: 'Increases the user\'s <strong>Crit Rate</strong> by <strong>+10%</strong>.',
+          core_2_title: '<span style="color: var(--accent-cyan);">(DEF %) ─</span> Arrogant Ruler\'s Will',
+          core_2_tag: 'Shield • Survival',
+          core_2_body: 'When using Basic Skill, grants a <strong>Shield</strong> equal to <strong>10%</strong> of Attack for <strong>10 seconds</strong> (Cooldown: <strong>45 s</strong>).',
+          core_3_title: '<span style="color: var(--accent-cyan);">(HP %) ─</span> Teeth of the Watcher',
+          core_3_tag: 'Efficiency • MP',
+          core_3_body: 'Decreases MP Recovery Rate by <strong>10%</strong> and reduces Basic Skill <strong>MP Consumption</strong> by <strong>12%</strong>.',
+          guide_substats_title: 'RECOMMENDED SUBSTATS (JINWOO BALANCE)',
+          guide_substats_desc: 'Depends on what you need to balance Jinwoo, prioritizing the following:',
+          substat_pen: 'Def. Penetration (%)',
+          substat_dmg: 'Damage Increase (%)',
+          footer_text: 'Analysis System v1.0 — Unofficial',
+
+          stat_label_atq: 'ATK',
+          stat_label_pre: 'ACC (%)',
+          stat_label_critdmg: 'CRIT DMG (%)',
+          stat_label_crit: 'CRIT (%)',
+          stat_label_pen: 'PEN (%)',
+          stat_label_aumdmg: 'DMG INC (%)',
+          goal_atq: '80k',
+          goal_crit: '50% (12k RAW vs debuffs)',
+          goal_prefix: 'Goal: ',
+          stat_title_attr: 'Click or hover for info',
+
+          crit_safe_badge: '✓ RESISTANT',
+          crit_safe_text: 'RAW {0} — Protected vs debuffs',
+          crit_warn_badge: '⚠ PARTIAL',
+          crit_warn_text: 'RAW {0} — Vulnerable to high debuffs (-30%)',
+          crit_danger_badge: '✕ VULNERABLE',
+          crit_danger_text: 'RAW {0} — Bosses will reduce your crit',
+
+          advice_init_tag: 'Optimization Guide',
+          advice_init_title: 'Start analyzing your stats!',
+          advice_init_desc: 'Enter the stats of your Jinwoo or DPS (manually or via OCR screenshot) to receive real-time diagnostics. We will show you which stats are below the meta average and which artifacts to focus your resources on.',
+          advice_good_tag: 'Excellent Build!',
+          advice_good_title: 'Stats at optimal competitive level',
+          advice_good_desc: 'Congratulations! All your stats meet or exceed the current meta goals for Rank S. Your DPS has the ideal balance to conquer the most demanding content (Guild Bosses, Workshop of Brilliant Light, etc.).',
+          advice_tag_crit: 'Top Priority',
+          advice_tag_warn: 'Attention',
+          advice_tag_info: 'Recommended Upgrade',
+          advice_focus_prefix: 'Focus resources on: ',
+          advice_map_atq: "Your Attack is below the 80,000 pts goal. To quickly increase your base and percentage ATK, upgrade your left set artifacts to +20 (especially Helmet and Gloves with Flat ATK and ATK % substats). For accessories, look for jewelry (like Ring) with ATK (%) main stat.",
+          advice_map_pre: "Your Accuracy is below the meta goal (95%). In high-level boss fights, lack of accuracy causes missed attacks and massive sustained DPS loss. Allocate status points to Perception or prioritize Accuracy (%) substats on your accessories.",
+          advice_map_crit: "Your Crit Rate or RAW value needs reinforcement. Remember the 50% meta cap and the 12,000 RAW point cushion to counter endgame boss crit reductions and resistances. Focus on finding this substat on your armor pieces (left set).",
+          advice_map_critdmg: "Your Crit Damage does not reach the recommended 210%. To achieve the burst damage characteristic of an S Rank DPS, it is essential to equip Boots with Crit Damage (%) main stat and stack this substat on every right set piece (Necklace, Bracelet, Ring, Earrings).",
+          advice_map_pen: "Your Def. Penetration is below 40%. Endgame bosses have massive defenses; increasing your Def. Pen. (%) through substats will allow you to ignore that mitigation and maximize real damage for every skill.",
+          advice_map_aumdmg: "Your Damage Increase is below 40%. This is one of the most valuable multipliers in the game to boost your final damage. Make sure to equip a Sphere/Bracelet with Elemental Damage main stat and prioritize Damage Increase (%) substats on your artifacts.",
+          advice_default_text: 'Optimize your artifact substats to increase this stat.',
+
+          toast_scan_done: 'Scan completed',
+          toast_scan_err: 'Scan error',
+          toast_scan_init: 'Initializing OCR...',
+          toast_scanning: 'Scanning... {0}%',
+
+          tooltip_atq_title: '✦ ATK (Base and Total Attack)',
+          tooltip_atq_body: 'It is the mathematical foundation on which the damage of your entire skill kit is calculated (basic attacks, normal skills, ultimates, and shadows).',
+          tooltip_atq_meta: '💡 SLA Meta: The vast majority of DPS hunters and Jinwoo scale with ATK. Exceeding 80,000 pts guarantees a solid base for taking down bosses in time-attack content.',
+          tooltip_pre_title: '✦ ACC (%) (Accuracy)',
+          tooltip_pre_body: 'Determines your probability of landing clean hits without suffering penalties from enemy evades or misses.',
+          tooltip_pre_meta: '💡 SLA Meta: Against higher-level bosses (red numbers), if your accuracy is lower than 95%, your attacks will miss, losing up to 50% damage and breaking your crit combos.',
+          tooltip_critdmg_title: '✦ CRIT DMG (%) (Critical Damage)',
+          tooltip_critdmg_body: 'Multiplies the final damage of your attack whenever a critical hit is triggered.',
+          tooltip_critdmg_meta: '💡 SLA Meta: This is the key stat for burst DPS. A minimum of 210% is targeted. To achieve this, equipping Boots with Crit Damage (%) main stat is essential.',
+          tooltip_crit_title: '✦ CRIT (%) (Critical Hit Rate)',
+          tooltip_crit_body: 'The percentage probability that any of your attacks will become a critical hit.',
+          tooltip_crit_meta: '💡 SLA Meta: The game has a strict 50% cap. However, endgame bosses apply resistances that reduce your crit; stacking ~12,000 RAW pts ensures maintaining a true 50% against debuffs.',
+          tooltip_pen_title: '✦ PEN (%) (Defense Penetration)',
+          tooltip_pen_body: 'Allows your attacks to ignore a direct percentage of the enemy\'s mitigation and armor.',
+          tooltip_pen_meta: '💡 SLA Meta: Bosses on high difficulties have massive defenses. Penetration over 40% exponentially increases your sustained real damage by piercing their armor.',
+          tooltip_aumdmg_title: '✦ DMG INC (%) (Damage Increase / Elemental)',
+          tooltip_aumdmg_body: 'An independent multiplier that directly amplifies all final damage dealt to the enemy.',
+          tooltip_aumdmg_meta: '💡 SLA Meta: One of the most valuable stats in the game. Found on Spheres/Bracelets and substats. As a final multiplier, 40%+ represents a gigantic leap in your DPS.'
+        }
+      };
+
+      function setLanguage(lang) {
+        currentLang = lang;
+        try { localStorage.setItem('sla_lang', lang); } catch(e){}
+        document.documentElement.lang = lang;
+        const btnEs = $('btn-es'), btnEn = $('btn-en');
+        if (btnEs && btnEn) {
+          btnEs.classList.toggle('active', lang === 'es');
+          btnEn.classList.toggle('active', lang === 'en');
+        }
+        const dict = I18N_DICT[lang] || I18N_DICT.es;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (dict[key]) {
+            el.textContent = dict[key];
+          }
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(el => {
+          const key = el.getAttribute('data-i18n-html');
+          if (dict[key]) {
+            el.innerHTML = dict[key];
+          }
+        });
+        document.querySelectorAll('.stat-name').forEach(el => {
+          el.setAttribute('title', dict.stat_title_attr || 'Info');
+        });
+        STATS.forEach(stat => {
+          stat.label = dict['stat_label_' + stat.key] || stat.label;
+          const textSpan = $('stat-label-text-' + stat.key);
+          if (textSpan) {
+            textSpan.textContent = stat.label;
+          }
+          const rowEl = $('row-' + stat.key);
+          if (rowEl) {
+            const goalLabel = rowEl.querySelector('.stat-goal-label');
+            if (goalLabel) {
+              const goalVal = stat.key === 'atq' ? dict.goal_atq : (stat.key === 'crit' ? dict.goal_crit : stat.goal + stat.unit);
+              goalLabel.textContent = dict.goal_prefix + goalVal;
+            }
+          }
+        });
+        updateCritNote(critRawValue);
+        updateAdvice();
+      }
+      window.setLanguage = setLanguage;
+
       const CRIT_RAW_SAFE = 12000;
       const STATS = [
         {
@@ -1072,47 +1398,15 @@
       const rankLetter = $('rank-letter'), rankPercent = $('rank-percent');
       const ocrPreview = $('ocr-preview'), ocrPreviewImg = $('ocr-preview-img');
       const ocrCloseBtn = $('ocr-close-btn'), toast = $('toast');
-      const STAT_DESCRIPTIONS = {
-        'atq': {
-          title: '✦ ATQ (Ataque Base y Total)',
-          body: 'Es la base matemática sobre la cual se calcula el daño de todo tu kit de habilidades (ataques básicos, habilidades normales, definitivas y sombras).',
-          meta: '💡 Meta SLA: La gran mayoría de cazadores DPS y Jinwoo escalan con ATQ. Superar los 80,000 pts garantiza una base sólida para derribar jefes en contenido contrarreloj.'
-        },
-        'pre': {
-          title: '✦ PRE (%) (Precisión)',
-          body: 'Determina tu probabilidad de conectar impactos limpios sin sufrir penalización por fallo o evasión del enemigo.',
-          meta: '💡 Meta SLA: Contra jefes de nivel superior (números rojos), si tu precisión es menor al 95%, tus ataques fallarán ("Miss"), perdiendo hasta 50% de daño y rompiendo tus combos de crítico.'
-        },
-        'critdmg': {
-          title: '✦ DAÑO CRIT (%) (Daño Crítico)',
-          body: 'Multiplica el daño final de tu ataque cada vez que se activa un impacto crítico.',
-          meta: '💡 Meta SLA: Es la estadística clave para el daño explosivo (burst DPS). Se busca un mínimo de 210%. Para lograrlo, es indispensable equipar Botas con stat principal de Daño Crítico (%).'
-        },
-        'crit': {
-          title: '✦ CRIT (%) (Índice de Golpe Crítico)',
-          body: 'Es la probabilidad porcentual de que cualquiera de tus ataques se convierta en un golpe crítico.',
-          meta: '💡 Meta SLA: El juego tiene un límite estricto del 50%. Sin embargo, los jefes endgame aplican resistencias que reducen tu crítico; acumular ~12,000 pts RAW asegura mantener el 50% real ante debuffs.'
-        },
-        'pen': {
-          title: '✦ PEN (%) (Penetración de Defensa)',
-          body: 'Permite que tus ataques ignoren un porcentaje directo de la mitigación y armadura del enemigo.',
-          meta: '💡 Meta SLA: Los bosses en dificultades altas tienen defensas masivas. Una penetración sobre el 40% aumenta exponencialmente tu daño real sostenido al atravesar su armadura.'
-        },
-        'aumdmg': {
-          title: '✦ AUM. DAÑO (%) (Aumento de Daño / Elemental)',
-          body: 'Es un multiplicador independiente que amplifica directamente todo el daño final infligido al enemigo.',
-          meta: '💡 Meta SLA: Una de las estadísticas más valiosas del juego. Se obtiene en Esferas/Pulseras y substats. Al ser un multiplicador final, un 40%+ representa un salto gigantesco en tu DPS.'
-        }
-      };
       const tooltip = $('stat-tooltip'), tooltipTitle = $('tooltip-title');
       const tooltipBody = $('tooltip-body'), tooltipMeta = $('tooltip-meta');
       let activeTooltipKey = null;
       function showTooltip(key, targetEl) {
-        const info = STAT_DESCRIPTIONS[key];
-        if (!info || !tooltip) return;
-        tooltipTitle.textContent = info.title;
-        tooltipBody.textContent = info.body;
-        tooltipMeta.textContent = info.meta;
+        const dict = I18N_DICT[currentLang] || I18N_DICT.es;
+        if (!tooltip) return;
+        tooltipTitle.textContent = dict['tooltip_' + key + '_title'];
+        tooltipBody.textContent = dict['tooltip_' + key + '_body'];
+        tooltipMeta.textContent = dict['tooltip_' + key + '_meta'];
         const rect = targetEl.getBoundingClientRect();
         tooltip.classList.add('show');
         activeTooltipKey = key;
@@ -1149,7 +1443,7 @@
         <div class="stat-info">
           <div class="stat-label-row">
             <span class="stat-name" id="label-${stat.key}" title="Haz click o pasa el mouse para información">
-              ${stat.label}
+              <span id="stat-label-text-${stat.key}">${stat.label}</span>
               <svg class="stat-help-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -1193,19 +1487,20 @@
         const label = $('crit-raw-label');
         if (!note || raw <= 0) { if (note) note.style.display = 'none'; return; }
         note.style.display = 'flex';
-        const formatted = raw.toLocaleString('es');
+        const formatted = raw.toLocaleString(currentLang === 'en' ? 'en-US' : 'es');
+        const dict = I18N_DICT[currentLang] || I18N_DICT.es;
         if (raw >= CRIT_RAW_SAFE) {
           note.className = 'crit-note safe';
-          badge.textContent = '✓ RESISTENTE';
-          label.textContent = `RAW ${formatted} — Protegido vs debuffs`;
+          badge.textContent = dict.crit_safe_badge;
+          label.textContent = dict.crit_safe_text.replace('{0}', formatted);
         } else if (raw >= CRIT_RAW_SAFE * 0.7) {
           note.className = 'crit-note warn';
-          badge.textContent = '⚠ PARCIAL';
-          label.textContent = `RAW ${formatted} — Vulnerable a debuffs altos (-30%)`;
+          badge.textContent = dict.crit_warn_badge;
+          label.textContent = dict.crit_warn_text.replace('{0}', formatted);
         } else {
           note.className = 'crit-note danger';
-          badge.textContent = '✕ VULNERABLE';
-          label.textContent = `RAW ${formatted} — Bosses reducirán tu crítico`;
+          badge.textContent = dict.crit_danger_badge;
+          label.textContent = dict.crit_danger_text.replace('{0}', formatted);
         }
       }
       function getColor(pct) {
@@ -1257,16 +1552,17 @@
       function updateAdvice() {
         const adviceContent = $('advice-content');
         if (!adviceContent) return;
+        const dict = I18N_DICT[currentLang] || I18N_DICT.es;
         const hasData = STATS.some(s => values[s.key] > 0);
         if (!hasData) {
           adviceContent.innerHTML = `
             <div class="advice-card">
               <div class="advice-card__title">
-                <span class="advice-card__tag tag--info">Guía de Optimización</span>
-                <span>¡Empieza a analizar tus estadísticas!</span>
+                <span class="advice-card__tag tag--info">${dict.advice_init_tag}</span>
+                <span>${dict.advice_init_title}</span>
               </div>
               <div class="advice-card__text">
-                Ingresa los valores de tu Jinwoo o DPS (manualmente o mediante captura OCR) para recibir un diagnóstico en tiempo real. Te indicaremos qué stats están por debajo de la media meta y a qué artefactos debes enfocar tus recursos.
+                ${dict.advice_init_desc}
               </div>
             </div>`;
           return;
@@ -1280,45 +1576,39 @@
           adviceContent.innerHTML = `
             <div class="advice-card advice-card--success">
               <div class="advice-card__title">
-                <span class="advice-card__tag tag--success">¡Build Excelente!</span>
-                <span>Estadísticas en nivel competitivo óptimo</span>
+                <span class="advice-card__tag tag--success">${dict.advice_good_tag}</span>
+                <span>${dict.advice_good_title}</span>
               </div>
               <div class="advice-card__text">
-                ¡Felicidades! Todas tus estadísticas cumplen o superan los objetivos del meta actual para el Rango S. Tu DPS tiene el equilibrio ideal para superar el contenido más exigente (jefes de gremio, taller de luz brillante, etc.).
+                ${dict.advice_good_desc}
               </div>
             </div>`;
           return;
         }
-        const adviceMap = {
-          'atq': "Tu Ataque está por debajo de la meta de 80,000 pts. Para aumentar tu ATQ base y porcentual rápidamente, sube a nivel +20 tus artefactos del set izquierdo (en especial Casco y Guantes con substats de ATQ Adicional y ATQ %). En accesorios, busca joyas (como el Anillo) con stat principal de ATQ (%).",
-          'pre': "Tu Precisión se encuentra por debajo del meta (95%). En combates contra jefes de alto nivel, la falta de precisión provoca ataques fallidos y una pérdida masiva de DPS constante. Asigna puntos de estado a Percepción o prioriza substats de Precisión (%) en tu set de accesorios.",
-          'crit': "Tu Índice de Golpe Crítico o su valor RAW necesita refuerzo. Recuerda el límite meta del 50% y el colchón de 12,000 puntos RAW para contrarrestar las reducciones y resistencias a críticos de los jefes endgame. Enfoca la búsqueda de este substat en tus piezas de armadura (set izquierdo).",
-          'critdmg': "Tu Daño Crítico no alcanza el 210% recomendado. Para lograr el daño explosivo característico de un DPS en Rango S, es fundamental equipar unas Botas con stat principal de Daño Crítico (%) y acumular este substat en cada pieza de tu set derecho (Collar, Pulsera, Anillo, Pendientes).",
-          'pen': "Tu Penetración de Defensa está por debajo del 40%. Los bosses endgame cuentan con defensas muy elevadas; incrementar tu Pen. Def (%) mediante substats te permitirá ignorar esa mitigación y maximizar el daño real de cada habilidad.",
-          'aumdmg': "Tu Aumento de Daño está por debajo del 40%. Este es uno de los multiplicadores más valiosos del juego para potenciar tu daño final. Asegúrate de equipar una Esfera/Pulsera con stat principal de Daño Elemental y priorizar substats de Aum. Daño (%) en tus artefactos."
-        };
         let html = '';
         needsImprovement.forEach((item, idx) => {
           let tagClass = 'tag--info';
-          let tagText = 'Mejora Recomendada';
+          let tagText = dict.advice_tag_info;
           let cardClass = '';
           if (idx === 0 && item.pct < 75) {
             tagClass = 'tag--critical';
-            tagText = 'Prioridad Máxima';
+            tagText = dict.advice_tag_crit;
             cardClass = 'advice-card--critical';
           } else if (item.pct < 85) {
             tagClass = 'tag--warn';
-            tagText = 'Atención';
+            tagText = dict.advice_tag_warn;
             cardClass = 'advice-card--warn';
           }
+          const statLabel = dict['stat_label_' + item.key] || item.label;
+          const adviceText = dict['advice_map_' + item.key] || dict.advice_default_text;
           html += `
             <div class="advice-card ${cardClass}">
               <div class="advice-card__title">
                 <span class="advice-card__tag ${tagClass}">${tagText}</span>
-                <span>Enfocar recursos en: ${item.label}</span>
+                <span>${dict.advice_focus_prefix}${statLabel}</span>
               </div>
               <div class="advice-card__text">
-                ${adviceMap[item.key] || 'Optimiza los substats de tus artefactos para subir esta estadística.'}
+                ${adviceText}
               </div>
             </div>`;
         });
@@ -1338,27 +1628,28 @@
         dropzone.classList.remove('hidden');
       });
       async function processImage(file) {
+        const dict = I18N_DICT[currentLang] || I18N_DICT.es;
         ocrPreviewImg.src = URL.createObjectURL(file);
         ocrPreview.classList.add('active');
         dropzone.classList.add('hidden');
         const scanOverlay = $('scan-overlay');
         scanOverlay.classList.add('active');
         scanBarFill.style.width = '0%';
-        scanLabel.textContent = 'Inicializando OCR...';
+        scanLabel.textContent = dict.toast_scan_init;
         try {
           const result = await Tesseract.recognize(file, 'eng+spa', {
             logger: m => {
               if (m.status === 'recognizing text') {
                 const pct = Math.round(m.progress * 100);
                 scanBarFill.style.width = pct + '%';
-                scanLabel.textContent = `Escaneando... ${pct}%`;
+                scanLabel.textContent = dict.toast_scanning.replace('{0}', pct);
               }
             }
           });
           parseOCRText(result.data.text);
-          showToast('Escaneo completado');
+          showToast(dict.toast_scan_done);
         } catch (err) {
-          showToast('Error en el escaneo');
+          showToast(dict.toast_scan_err);
         } finally {
           scanOverlay.classList.remove('active');
           scanBarFill.style.width = '0%';
@@ -1504,6 +1795,7 @@
       buildRows();
       updateRank();
       initParticles();
+      setLanguage(currentLang);
     })();
   </script>
 </body>
