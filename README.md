@@ -29,21 +29,46 @@ Una herramienta web de auditoría de estadísticas en tiempo real y guía de opt
 
 ---
 
+## Cómo Usar la Calculadora
+
+Tienes dos formas muy sencillas de evaluar a tu personaje:
+
+### 1. Escaneo Automático con OCR (Recomendado)
+1. **Captura tus Stats**: En *Solo Leveling: Arise*, ve a la pantalla de estadísticas de Sung Jinwoo (o tu personaje DPS) y toma una captura de pantalla (`Win + Shift + S` en Windows).
+2. **Sube la Imagen**: Pega la captura directamente en la página presionando `Ctrl + V`, o arrástrala hacia el recuadro de escaneo.
+3. **Análisis Instantáneo**: El sistema OCR leerá la foto en segundos y rellenará todas las casillas automáticamente.
+
+### 2. Ingreso Manual
+* Si lo prefieres, puedes hacer clic en cualquier casilla (Ataque, Precisión, Daño Crítico, etc.) y escribir o ajustar los valores manualmente con el teclado.
+
+### 3. Interpreta tu Diagnóstico
+* Revisa tus tarjetas de **Diagnóstico y Consejos de Optimización** para descubrir exactamente qué estadísticas están por debajo de la meta.
+* Consulta la guía inferior de **Artefactos y Núcleos** para saber qué piezas y subestadísticas específicas debes buscar para alcanzar el **Rango S**.
+
+---
+
 ## Estructura del Proyecto
 
 ```text
 SRANKCalculator/
 │
-├── index.html       # Aplicación principal (HTML, CSS y lógica JS en un solo archivo optimizado)
-└── README.md        # Documentación y descripción del proyecto
+├── index.html       # Aplicación web completa (HTML, estilos CSS y lógica JS en un único archivo)
+├── LICENSE          # Licencia CC BY-NC 4.0 (Libre uso no comercial con créditos)
+└── README.md        # Documentación y descripción general del proyecto
 ```
 
 ---
 
-## Notas de la Versión
+## Licencia y Condiciones de Uso
 
-* **v1.0**: Lanzamiento inicial con sistema OCR, calculadora en tiempo real, interfaz dark mode mejorada, paleta de colores de alta legibilidad y guías completas de artefactos y núcleos.
+Este proyecto está bajo la licencia **Creative Commons Atribución-NoComercial 4.0 (CC BY-NC 4.0)**.
+
+* **Libre Uso y Modificación**: Puedes utilizar, copiar, adaptar y mejorar este código libremente para la comunidad.
+* **Créditos Requeridos (Atribución)**: Es obligatorio otorgar los créditos correspondientes al creador original de **S Rank Calculator**, enlazando al repositorio y mencionando si se realizaron cambios.
+* **Prohibida su Venta (No Comercial)**: Al ser una herramienta creada gratuitamente para la comunidad, **queda estrictamente prohibida su venta, comercialización o uso con fines de lucro**.
+
+Consulta el archivo [LICENSE](LICENSE) para leer los términos legales completos.
 
 ---
 
-*Desarrollado como herramienta de análisis no oficial para la comunidad de Solo Leveling: Arise.*
+*Proyecto creado para la comunidad de jugadores de Solo Leveling: Arise.*
